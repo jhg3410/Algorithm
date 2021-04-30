@@ -62,3 +62,43 @@ h가 1한번을 허용하고 또 1이 나오면 while문을 빠져나오게 하�
 그리곤 h_lst 에 요소들을 하나씩 꺼내서 2중반복문을 돌린다. 다음 코드부터는 삽입정렬하고 거의 유사하다.  
 현재 값을 넣어주는데 h부터 넣어준다. 그러고는 j변수를 i와 같게 만들어주고 간격만큼 j를 뺴주면서 현재값과 비교하면서  
 삽입정렬처럼 반복문이 나올때 까지 옮겨주고 나오면 currentelement값을 j인덱스에 넣어준다.  
+- - -
+## main
+``` python
+import insertion_sort
+import selection_sort
+import shell_sort
+import timeit
+
+A = [10,20,30,40,90,80,70,60,50]    # 어느정도 정렬이 되어있는 배열
+A = [90,80,70,60,50,40,30,20,10]    # 정렬이 전혀 되어있지않은 배열
+n = len(A)
+start_time = timeit.default_timer()
+print("정렬된 배열 :",selection_sort.selection_sort(A,n))
+print("선택정렬의 시간은 : ",timeit.default_timer()-start_time)
+start_time = timeit.default_timer()
+print("정렬된 배열 :",insertion_sort.insertion_sort(A,n))
+print("삽입정렬의 시간은 : ",timeit.default_timer()-start_time)
+start_time = timeit.default_timer()
+print("정렬된 배열 :",shell_sort.shell_sort(A,n))
+print("쉘 정렬의  시간은 : ",timeit.default_timer()-start_time)
+```
+미리 정의한 정렬들을 import 받아서 실행시켰다.
+두개의 배열을 초기화 한 이유는 시간복잡도를 비교해보기 위해서이다.  
+출력값을 위의 A먼저 보여드리고 비교한 다음 2번쨰 A로 실행해서 비교하겠습니다.  
+### 어느정도 정렬이 되어있는 배열  
+* 출력  
+![image](https://user-images.githubusercontent.com/80373033/116665175-60f8a180-a9d4-11eb-8599-a766cb7af788.png)  
+보시면 어느정도 정렬이 되어있으면   
+걸린 시간은 선택정렬 > 삽입정렬 > 쉘 정렬 이다.  
+성능은 반대로 쉘정렬 > 삽입정렬 > 선택정렬 이다.  
+### 배열이 전혀 되어있지않은 배열  
+* 출력  
+![image](https://user-images.githubusercontent.com/80373033/116665103-4c1c0e00-a9d4-11eb-88d9-c0900ed012f8.png)  
+보시면 정렬이 되어있지 않으면
+걸린 시간은 선택정렬 > 삽입정렬 > 쉘 정렬 이다.  
+성능은 반대로 쉘정렬 > 삽입정렬 > 선택정렬 이다.
+하지만 많이 실행 하다보면 쉘정렬은 항상 성능이 가장 좋지만
+삽입과 선택은 엎치락 뒤치락한다.  
+
+여기서 알 수 있는 것은 쉘 정렬이 가장 좋고 어느 정도 정렬이 되어있으면 삽입 > 선택 정렬이 되어있지 않으면 삽입 == 선택이다.  

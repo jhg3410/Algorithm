@@ -124,7 +124,7 @@ print("쉘 정렬의  시간은 : ",timeit.default_timer()-start_time)
 ![image](https://user-images.githubusercontent.com/80373033/116834188-ead48480-abf7-11eb-99b5-3bff1e076b0e.png)  
 ![image](https://user-images.githubusercontent.com/80373033/116982841-468c3400-ad04-11eb-90db-6c613a13f693.png)  
 표로 시간복잡도를 나타내면 이렇게 된다.  
-선택 정렬은 배열에 상관없이 두번 반복문을 돌아 n<sup>2</sup>이 되고  
+선택 정렬과 버블정렬은 배열에 상관없이 두번 반복문을 돌아 n<sup>2</sup>이 되고  
 삽입과 쉘은 정렬이 되어있는 배열이라면 반복문 한번만 돌면 되기에 n이 되고 아니면 두번 돌아 n<sup>2</sup>이 되어버린다.  
 쉘은 삽입보다 평균적으로 시간복잡도가 더 좋기때문에 평균에서 차이가 난다.  
     

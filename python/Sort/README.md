@@ -112,7 +112,7 @@ print("쉘 정렬의  시간은 : ",timeit.default_timer()-start_time)
 성능은 반대로  쉘정렬 > 삽입정렬 > 선택정렬 > 버블정렬 다.  
 ###  정열이 전혀 되어있지않은 배열  
 * 출력  
-![image](https://user-images.githubusercontent.com/80373033/116982600-f1502280-ad03-11eb-98c8-3f171aaee7e7.png)  
+![image](https://user-images.githubusercontent.com/80373033/116982714-1c3a7680-ad04-11eb-8f02-cc4a2ce53ab6.png)  
 보시면 정렬이 되어있지 않으면  
 걸린 시간은 버블정렬 > 선택정렬 = 삽입정렬 > 쉘 정렬이다.  
 성능은 반대로 쉘정렬 > 삽입정렬 = 선택정렬 > 버블정렬이다.  

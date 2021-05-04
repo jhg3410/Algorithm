@@ -79,6 +79,7 @@ h가 1한번을 허용하고 또 1이 나오면 while문을 빠져나오게 하�
 - - -
 ## Main
 ``` python
+import bubble_sort
 import insertion_sort
 import selection_sort
 import shell_sort
@@ -87,6 +88,9 @@ import timeit
 A = [10,20,30,40,90,80,70,60,50]    # 어느정도 정렬이 되어있는 배열
 A = [90,80,70,60,50,40,30,20,10]    # 정렬이 전혀 되어있지않은 배열
 n = len(A)
+start_time = timeit.default_timer()
+print("정렬된 배열 :",bubble_sort.bubble_sort(A,n))
+print("버블정렬의 시간은 : ",timeit.default_timer()-start_time)
 start_time = timeit.default_timer()
 print("정렬된 배열 :",selection_sort.selection_sort(A,n))
 print("선택정렬의 시간은 : ",timeit.default_timer()-start_time)

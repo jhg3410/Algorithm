@@ -131,6 +131,7 @@ print("쉘 정렬의  시간은 : ",timeit.default_timer()-start_time)
 ## 그래프  
 ![image](https://user-images.githubusercontent.com/80373033/116835786-f5464c80-abfe-11eb-8225-06f77180c145.png)  
 선택 정렬과 삽입 정렬의 시간 복잡도를 그래프로 비교한 것이다.  
+버블 정렬은 선택 정렬과 비슷한 그래프를 나타낸다.  
 정렬된 선택과 역순인 선택이 같은 n<sup>2</sup>이지만 차이가 나는 이유는 반복문뿐만 아니라 if문을 통과하고 안하고의 차이도 있기 때문이다.  
 
 ![image](https://user-images.githubusercontent.com/80373033/116836406-52430200-ac01-11eb-8655-303399b8c73e.png)  

@@ -40,6 +40,6 @@ for i in range(n):
 
 print(solve(n,m,t))
 ```
-위의 함수에 위 코드로 실행하면
+위의 함수에 위 코드로 실행하면  
 ![image](https://user-images.githubusercontent.com/80373033/118241523-3714a400-b4d7-11eb-9270-de63322f5ddc.png)  
 위 설명처럼 랜덤으로 t를 넣어도 별 차이가 안나는것을 볼 수 있다.

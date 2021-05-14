@@ -59,6 +59,19 @@ print("최적해 :",solve_optimal(n,m,t))
 위의 함수에 위 코드로 실행하면  
 ![image](https://user-images.githubusercontent.com/80373033/118243176-1b120200-b4d9-11eb-895a-91d40aff8568.png)  
 위 처럼 결과가 나온다. 최적해과 조금 더 적게 나오지만 크게 차이가 없다는걸 알 수 있다.  
+``` python 
+n = 2**16   # 작업 수
+m = 16     # 기계 수
+t = []
+for i in range(n):
+    t.append(random.randrange(1,30))    # 각 작업의 소요시간
+start = time.time()
+print("근사해 :",solve(n,m,t))
+print("근사 알고리즘의 실행시간 :",time.time()-start)
+start = time.time()
+print("최적해 :",solve_optimal(n,m,t))
+print("최적 알고리즘의 실행시간 :",time.time()-start)
+```
 실행 시간(n을 2<sup>16</sup>으로):  
 ![image](https://user-images.githubusercontent.com/80373033/118244094-1f8aea80-b4da-11eb-8b5e-b265e980d404.png)  
 보다시피 최적 알고리즘이 더 걸리는것을 알 수 있다.  

@@ -48,31 +48,26 @@ def solve_optimal(n,m,t):
 - - -
 ### 결과값
 ``` python
-n = 2**8   # 작업 수
-m = 16     # 기계 수
-t = []
-for i in range(n):
-    t.append(random.randrange(1,30))    # 각 작업의 소요시간을 랜덤으로
+import random   # 난수를 사용하기 위해 random 모듈 import
+import timeit   # 시간측정을 위해 import
+from Job_Scheduling import solve    # 함수 사용을 위해 import
+from Job_Scheduling_optimal import solve_optimal    # 함수 사용을 위해 import
 
-print("근사해 :",solve(n,m,t))
-print("최적해 :",solve_optimal(n,m,t))
+n = [4,8,16]   # 작업 수
+m = 2     # 기계 수
+for i in range(len(n)):
+    t = []
+    for j in range(n[i]):
+        t.append(random.randrange(1,10))    # 각 작업의 소요시간
+        
+    start = timeit.default_timer()      # 시작 시간
+    print("작업수 :",n[i],"의","근사해 :",solve(n[i],m,t))  #
+    print("근사 알고리즘의 실행시간 :",timeit.default_timer()-start,"초 걸렸습니다")    # 현재시간 - 시작시간 = 실행시간
+    start = timeit.default_timer()
+    print("작업수 :",n[i],"의","최적해 :",solve_optimal(n[i],m,t))
+    print("최적 알고리즘의 실행시간 :",timeit.default_timer()-start,"초 걸렸습니다")
+    
 ```
 위의 함수에 위 코드로 실행하면  
-![image](https://user-images.githubusercontent.com/80373033/118243176-1b120200-b4d9-11eb-895a-91d40aff8568.png)  
-위 처럼 결과가 나온다. 최적해과 조금 더 적게 나오지만 크게 차이가 없다는걸 알 수 있다.  
-``` python 
-n = 2**16   # 작업 수
-m = 16     # 기계 수
-t = []
-for i in range(n):
-    t.append(random.randrange(1,30))    # 각 작업의 소요시간
-start = time.time()
-print("근사해 :",solve(n,m,t))
-print("근사 알고리즘의 실행시간 :",time.time()-start)
-start = time.time()
-print("최적해 :",solve_optimal(n,m,t))
-print("최적 알고리즘의 실행시간 :",time.time()-start)
-```
-실행 시간(n을 2<sup>16</sup>으로):  
-![image](https://user-images.githubusercontent.com/80373033/118244094-1f8aea80-b4da-11eb-8b5e-b265e980d404.png)  
-보다시피 최적 알고리즘이 더 걸리는것을 알 수 있다.  
+![image](https://user-images.githubusercontent.com/80373033/118423603-5b06fe00-b700-11eb-8460-556f3420180e.png)  
+위 처럼 결과가 나온다. 최적해가 조금 더 적게 나오지만 실행시간은 최적해 코드가 더 오래 걸리는 것을 알 수 있다.

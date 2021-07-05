@@ -1,2 +1,2 @@
 ### Baekjoon 146  
-### programmers 47
+### programmers 48

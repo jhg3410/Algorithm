@@ -1,35 +1,22 @@
 def solution(s):
-    length = len(s)
-    back_length = length//2
-    front= s[:length-back_length]
-    back= s[length-back_length:]
-    back = back[::-1]
-    i = 0
-    answer= ''
-    while True:
-        if i < len(front):
-            answer+=front[i]
-        if i < len(back):
-            answer+=back[i]
-        if i >= len(front):
-            break
-        i += 1
-    return answer
+    s=list(s)
+    for i in range(len(s)//2):
+        s.insert((i*2)+1,s.pop())
+    return ''.join(s)
 
 
 n= int(input())
 s= input()
-q = s
+pre_s = s
 repeat = 0
+li= [s]
 while True:
-    repeat += 1
+    repeat+= 1
     s = solution(s)
-    if q==s:
+    li.append(s)
+    if pre_s==s:
+        li.pop()
         break
-
-cnt = repeat - (n % repeat)
-
-for _ in range(cnt):
-    q = solution(q)    
-
-print(q)
+    
+cnt= (repeat - (n % repeat)) % repeat
+print(li[cnt])

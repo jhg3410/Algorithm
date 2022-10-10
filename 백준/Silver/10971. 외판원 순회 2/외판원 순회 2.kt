@@ -1,3 +1,5 @@
+package heejik.`4week`
+
 import java.util.Collections.min
 
 
@@ -13,11 +15,9 @@ fun main() {
         li.add(readln().split(' ').map { it.toInt() })
     }
 
-    li.forEachIndexed { x, _ ->
-        li[x].forEachIndexed { y, i ->
-            if (i != 0) {
-                solve(x, x, y, listOf(x,y), i)
-            }
+    for (i in 1 until n){
+        if (li[0][i] != 0) {
+            solve(0, 0, i, listOf(0, i), li[0][i])
         }
     }
     println(min(score_li))
@@ -25,7 +25,7 @@ fun main() {
 
 fun solve(start: Int, from: Int, to: Int, city: List<Int>, score: Int) {
     if (city.size == n) {
-        if (li[to][start] != 0 ) {
+        if (li[to][start] != 0) {
             score_li.add(score + li[to][start])
         }
         return
@@ -33,7 +33,7 @@ fun solve(start: Int, from: Int, to: Int, city: List<Int>, score: Int) {
 
     for (i in 0 until n) {
         if (i !in city && i != from && li[to][i] != 0) {
-            solve(start, to ,i, city.plus(i), score + li[to][i])
+            solve(start, to, i, city.plus(i), score + li[to][i])
         }
     }
 }

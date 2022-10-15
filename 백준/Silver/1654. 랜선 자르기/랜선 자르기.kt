@@ -1,17 +1,18 @@
 package heejik.`5week`
 
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import kotlin.system.exitProcess
 
 val lines = mutableListOf<Long>()
 
-fun main() {
-
+fun main(): Unit = with(BufferedReader(InputStreamReader(System.`in`))) {
     var answer = 0L
-    val (k, n) = readln().split(' ').map { it.toInt() }
+    val (k, n) = readLine().split(' ').map { it.toInt() }
     var s = 0L
 
     repeat(k) {
-        val line = readln().toLong()
+        val line = readLine().toLong()
         lines.add(line)
         s += line
     }

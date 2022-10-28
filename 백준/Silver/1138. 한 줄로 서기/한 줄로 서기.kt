@@ -11,15 +11,12 @@ class `한 줄로 서기` {
         for (i in 1..n) {
             val leftCnt = man[i - 1]
             var cnt = 0
-            run breaker@{
-                answer.forEachIndexed { index, value ->
-                    if (value == Int.MAX_VALUE && cnt == leftCnt) {
-                        answer[index] = i
-                        return@breaker
-                    }
-                    if (value > i) {
-                        cnt += 1
-                    }
+            answer.forEachIndexed { index, value ->
+                if (value == Int.MAX_VALUE && cnt == leftCnt) {
+                    answer[index] = i
+                }
+                if (value > i) {
+                    cnt += 1
                 }
             }
         }

@@ -18,7 +18,7 @@ class `문자열 집합` {
 
         repeat(m) {
             br.readLine().run {
-                if (s.contains(this)) answer += 1
+                if (s.containsKey(this)) answer += 1
             }
         }
         println(answer)

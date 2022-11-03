@@ -7,13 +7,13 @@ class `문자열 집합` {
     val br = BufferedReader(InputStreamReader(System.`in`))
 
     fun solve() {
-        
+
         var answer = 0
-        val s = mutableListOf<String>()
+        val s = HashMap<String,Int>()
         val (n, m) = br.readLine().split(' ').map { it.toInt() }
 
         repeat(n) {
-            s.add(br.readLine())
+            s[br.readLine()] = 1
         }
 
         repeat(m) {

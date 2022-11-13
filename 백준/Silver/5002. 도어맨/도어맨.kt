@@ -12,7 +12,7 @@ class 도어맨 {
         var mCount = 0
         var isChanged = false
 
-        kotlin.run {
+        this.run {
             order.forEachIndexed { index, _c ->
                 var c = _c
                 if (isChanged) {

@@ -6,12 +6,10 @@ class `부분수열의 합` {
     var n = 0
     var s = 0
     lateinit var numArray: MutableList<Int>
-    lateinit var check: MutableList<Boolean>
     fun solve() {
         readln().split(' ').map { it.toInt() }.run {
             n = first()
             s = last()
-            check = MutableList(n) { false }
         }
         numArray = readln().split(' ').map { it.toInt() }.toMutableList()
 
@@ -24,9 +22,7 @@ class `부분수열의 합` {
 
         val total = _total + numArray[idx]
 
-        if (total == s) {
-            cnt++
-        }
+        if (total == s) cnt++
 
         rec(idx+1, total)
         rec(idx+1, total - numArray[idx])

@@ -1,0 +1,4 @@
+-- 코드를 입력하세요
+SELECT BOOK_ID, DATE_FORMAT(PUBLISHED_DATE, "%Y-%m-%d")
+FROM book
+WHERE year(PUBLISHED_DATE) = '2021' AND CATEGORY = '인문'

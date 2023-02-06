@@ -5,9 +5,17 @@ import kotlin.system.exitProcess
 
 class `감시 피하기` {
 
+    companion object {
+        private const val STUDENT = "S"
+        private const val TEACHER = "T"
+        private const val OBJECT = "O"
+        private const val BLANK = "X"
+        private const val MAX_OBJECT_COUNT = 3
+    }
+
+
     private val hall = mutableListOf<MutableList<String>>()
     var n by Delegates.notNull<Int>()
-
 
     enum class Move(val pos: Pos) {
         TOP(pos = Pos(x = -1, y = 0)),
@@ -20,7 +28,7 @@ class `감시 피하기` {
         val x: Int,
         val y: Int
     ) {
-        infix fun plus(other: Pos) = Pos(x = this.x + other.x, y = this.y + other.y)
+        operator fun plus(other: Pos) = Pos(x = this.x + other.x, y = this.y + other.y)
         infix fun isInHall(hallSize: Int) = x in 0 until hallSize && y in 0 until hallSize
     }
 
@@ -38,12 +46,12 @@ class `감시 피하기` {
     }
 
     private fun start() {
-        pick(selectedPos = listOf())
+        pick(selectedObject = listOf())
         print("NO")
     }
 
-    private fun pick(selectedPos: List<Pos>) {
-        if (selectedPos.size == 3) {
+    private fun pick(selectedObject: List<Pos>) {
+        if (selectedObject.size == MAX_OBJECT_COUNT) {
             if (check()) {
                 println("YES")
                 exitProcess(0)
@@ -53,10 +61,10 @@ class `감시 피하기` {
 
         for (x in 0 until n) {
             for (y in 0 until n) {
-                if (hall[x][y] == "X") {
-                    hall[x][y] = "O"
-                    pick(selectedPos.plus(Pos(x, y)))
-                    hall[x][y] = "X"
+                if (hall[x][y] == BLANK) {
+                    hall[x][y] = OBJECT
+                    pick(selectedObject.plus(Pos(x, y)))
+                    hall[x][y] = BLANK
                 }
             }
         }
@@ -64,10 +72,10 @@ class `감시 피하기` {
 
     private fun check(): Boolean {
         hall.forEachIndexed { x, row ->
-            row.forEachIndexed { y, s ->
-                if (s == "T") {
-                    if (checkByTeacher(teacherPos = Pos(x, y)).not()) return false
-                }
+            row.forEachIndexed row@{ y, s ->
+                if (s != TEACHER) return@row
+
+                if (checkByTeacher(teacherPos = Pos(x, y)).not()) return false
             }
         }
         return true
@@ -75,42 +83,25 @@ class `감시 피하기` {
 
     private fun checkByTeacher(teacherPos: Pos): Boolean {
 
-        var topPos = teacherPos plus Move.TOP.pos
-        var bottomPos = teacherPos plus Move.BOTTOM.pos
-        var leftPos = teacherPos plus Move.LEFT.pos
-        var rightPos = teacherPos plus Move.RIGHT.pos
+        if (checkByTeacherPos(pos = teacherPos, move = Move.TOP).not()) return false
 
-        // 위
-        while (topPos.isInHall(n)) {
-            when (hall[topPos.x][topPos.y]) {
-                "O" -> break
-                "S" -> return false
+        if (checkByTeacherPos(pos = teacherPos, move = Move.BOTTOM).not()) return false
+
+        if (checkByTeacherPos(pos = teacherPos, move = Move.LEFT).not()) return false
+
+        if (checkByTeacherPos(pos = teacherPos, move = Move.RIGHT).not()) return false
+
+        return true
+    }
+
+    private fun checkByTeacherPos(pos: Pos, move: Move): Boolean {
+        var newPos = pos + move.pos
+        while (newPos isInHall n) {
+            when (hall[newPos.x][newPos.y]) {
+                OBJECT -> break
+                STUDENT -> return false
             }
-            topPos = topPos plus Move.TOP.pos
-        }
-        // 아래
-        while (bottomPos.isInHall(n)) {
-            when (hall[bottomPos.x][bottomPos.y]) {
-                "O" -> break
-                "S" -> return false
-            }
-            bottomPos = bottomPos plus Move.BOTTOM.pos
-        }
-        // 왼
-        while (leftPos.isInHall(n)) {
-            when (hall[leftPos.x][leftPos.y]) {
-                "O" -> break
-                "S" -> return false
-            }
-            leftPos = leftPos plus Move.LEFT.pos
-        }
-        // 오
-        while (rightPos.isInHall(n)) {
-            when (hall[rightPos.x][rightPos.y]) {
-                "O" -> break
-                "S" -> return false
-            }
-            rightPos = rightPos plus Move.RIGHT.pos
+            newPos += move.pos
         }
         return true
     }

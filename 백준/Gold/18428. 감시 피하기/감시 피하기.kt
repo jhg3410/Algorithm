@@ -5,6 +5,10 @@ import kotlin.system.exitProcess
 
 class `감시 피하기` {
 
+    private val hall = mutableListOf<MutableList<String>>()
+    var n by Delegates.notNull<Int>()
+
+
     enum class Move(val pos: Pos) {
         TOP(pos = Pos(x = -1, y = 0)),
         BOTTOM(pos = Pos(x = +1, y = 0)),
@@ -17,11 +21,9 @@ class `감시 피하기` {
         val y: Int
     ) {
         infix fun plus(other: Pos) = Pos(x = this.x + other.x, y = this.y + other.y)
+        infix fun isInHall(hallSize: Int) = x in 0 until hallSize && y in 0 until hallSize
     }
 
-    val hall = mutableListOf<MutableList<String>>()
-    val tmpHall = mutableListOf<MutableList<String>>()
-    var n by Delegates.notNull<Int>()
 
     fun solve() {
         setting()
@@ -31,9 +33,7 @@ class `감시 피하기` {
     private fun setting() {
         n = readln().toInt()
         repeat(n) {
-            val row = readln().split(' ').toMutableList()
-            hall.add(row)
-            tmpHall.add(row.toMutableList())
+            hall.add(readln().split(' ').toMutableList())
         }
     }
 
@@ -53,17 +53,17 @@ class `감시 피하기` {
 
         for (x in 0 until n) {
             for (y in 0 until n) {
-                if (tmpHall[x][y] == "X") {
-                    tmpHall[x][y] = "O"
+                if (hall[x][y] == "X") {
+                    hall[x][y] = "O"
                     pick(selectedPos.plus(Pos(x, y)))
-                    tmpHall[x][y] = "X"
+                    hall[x][y] = "X"
                 }
             }
         }
     }
 
     private fun check(): Boolean {
-        tmpHall.forEachIndexed { x, row ->
+        hall.forEachIndexed { x, row ->
             row.forEachIndexed { y, s ->
                 if (s == "T") {
                     if (checkByTeacher(teacherPos = Pos(x, y)).not()) return false
@@ -81,32 +81,32 @@ class `감시 피하기` {
         var rightPos = teacherPos plus Move.RIGHT.pos
 
         // 위
-        while (isInHall(topPos)) {
-            when (tmpHall[topPos.x][topPos.y]) {
+        while (topPos.isInHall(n)) {
+            when (hall[topPos.x][topPos.y]) {
                 "O" -> break
                 "S" -> return false
             }
             topPos = topPos plus Move.TOP.pos
         }
         // 아래
-        while (isInHall(bottomPos)) {
-            when (tmpHall[bottomPos.x][bottomPos.y]) {
+        while (bottomPos.isInHall(n)) {
+            when (hall[bottomPos.x][bottomPos.y]) {
                 "O" -> break
                 "S" -> return false
             }
             bottomPos = bottomPos plus Move.BOTTOM.pos
         }
         // 왼
-        while (isInHall(leftPos)) {
-            when (tmpHall[leftPos.x][leftPos.y]) {
+        while (leftPos.isInHall(n)) {
+            when (hall[leftPos.x][leftPos.y]) {
                 "O" -> break
                 "S" -> return false
             }
             leftPos = leftPos plus Move.LEFT.pos
         }
         // 오
-        while (isInHall(rightPos)) {
-            when (tmpHall[rightPos.x][rightPos.y]) {
+        while (rightPos.isInHall(n)) {
+            when (hall[rightPos.x][rightPos.y]) {
                 "O" -> break
                 "S" -> return false
             }
@@ -114,8 +114,6 @@ class `감시 피하기` {
         }
         return true
     }
-
-    private fun isInHall(pos: Pos) = pos.x in 0 until n && pos.y in 0 until n
 }
 
 fun main() {

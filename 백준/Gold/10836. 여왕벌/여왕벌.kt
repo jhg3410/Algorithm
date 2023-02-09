@@ -41,7 +41,7 @@ class 여왕벌 {
 
     var m by Delegates.notNull<Int>()
     var n by Delegates.notNull<Int>()
-    private lateinit var beeHome: List<MutableList<Int>>
+    private lateinit var beeHome: MutableList<MutableList<Int>>
     private val fakeBeeHome = mutableListOf<MutableList<Int>>()
 
     fun solve() {
@@ -49,7 +49,7 @@ class 여왕벌 {
         readln().split(' ').map { it.toInt() }.run {
             m = this.first()
             n = this.last()
-            beeHome = List(m) { MutableList(m) { 1 } }
+            beeHome = MutableList(m) { MutableList(m) { 1 } }
         }
 
         repeat(n) {
@@ -84,11 +84,15 @@ class 여왕벌 {
             growOneLine(offset = i)
         }
 
-        fakeBeeHome.forEachIndexed { x, row ->
-            row.forEachIndexed { y, size ->
-                beeHome[x][y] = size
-            }
+        beeHome.clear()
+        fakeBeeHome.forEach {
+            beeHome.add(it.toMutableList())
         }
+//        fakeBeeHome.forEachIndexed { x, row ->
+//            row.forEachIndexed { y, size ->
+//                beeHome[x][y] = size
+//            }
+//        }
     }
 
     private fun growOneLine(offset: Int) {

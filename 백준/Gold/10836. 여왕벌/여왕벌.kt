@@ -4,6 +4,11 @@ import kotlin.properties.Delegates
 
 class 여왕벌 {
 
+    data class Space(
+        var size: Int,
+        var growth: Int
+    )
+
     data class Pos(
         val x: Int,
         val y: Int
@@ -26,9 +31,9 @@ class 여왕벌 {
             listOf(zeroCnt, oneCnt, twoCnt).forEachIndexed { number, cnt ->
                 if (cnt <= 0) return@forEachIndexed
                 when (number) {
-                    0 -> zeroCnt --
-                    1 -> oneCnt --
-                    2 -> twoCnt --
+                    0 -> zeroCnt--
+                    1 -> oneCnt--
+                    2 -> twoCnt--
                 }
                 return number
             }
@@ -41,41 +46,47 @@ class 여왕벌 {
 
     var m by Delegates.notNull<Int>()
     var n by Delegates.notNull<Int>()
-    private lateinit var beeHome: MutableList<MutableList<Int>>
-    private val fakeBeeHome = mutableListOf<MutableList<Int>>()
+    private lateinit var beeHome: MutableList<MutableList<Space>>
 
     fun solve() {
 
         readln().split(' ').map { it.toInt() }.run {
             m = this.first()
             n = this.last()
-            beeHome = MutableList(m) { MutableList(m) { 1 } }
+            beeHome = MutableList(m) { MutableList(m) { Space(1, 0) } }
         }
 
         repeat(n) {
             val firstGrowth = readln().split(' ').map { it.toInt() }.toFirstGrowth()
-            growth(firstGrowth)
+            grow(firstGrowth)
         }
 
         beeHome.forEach {
-            println(it.joinToString(" "))
+            println(it.map { space -> space.size }.joinToString(" "))
         }
     }
 
-    private fun growth(firstGrowth: FirstGrowth) {
-        fakeBeeHome.clear()
-        beeHome.forEach {
-            fakeBeeHome.add(it.toMutableList())
-        }
+    private fun grow(firstGrowth: FirstGrowth) {
 
         // 왼쪽 제일 아래부터 오른쪽 제일 위까지
 
         for (x in m - 1 downTo 1) {
-            fakeBeeHome[x][0] += firstGrowth.getFirstGrowthAndReduceCnt()
+            firstGrowth.getFirstGrowthAndReduceCnt().run {
+                beeHome[x][0].size += this
+                beeHome[x][0].growth = this
+            }
         }
-        fakeBeeHome[0][0] += firstGrowth.getFirstGrowthAndReduceCnt()
+        firstGrowth.getFirstGrowthAndReduceCnt().run {
+            beeHome[0][0].size += this
+            beeHome[0][0].growth = this
+        }
+
+
         for (y in 1 until m) {
-            fakeBeeHome[0][y] += firstGrowth.getFirstGrowthAndReduceCnt()
+            firstGrowth.getFirstGrowthAndReduceCnt().run {
+                beeHome[0][y].size += this
+                beeHome[0][y].growth = this
+            }
         }
 
         // 왼쪽, 왼위, 위의 최댓값으로 값 증가시키기
@@ -83,26 +94,25 @@ class 여왕벌 {
         for (i in 1 until m) {
             growOneLine(offset = i)
         }
-
-        beeHome.clear()
-        fakeBeeHome.forEach {
-            beeHome.add(it.toMutableList())
-        }
-//        fakeBeeHome.forEachIndexed { x, row ->
-//            row.forEachIndexed { y, size ->
-//                beeHome[x][y] = size
-//            }
-//        }
     }
 
     private fun growOneLine(offset: Int) {
-        fakeBeeHome[offset][offset] += getAroundIncrease(Pos(offset, offset))
+        getAroundIncrease(Pos(offset, offset)).run {
+            beeHome[offset][offset].size += this
+            beeHome[offset][offset].growth = this
+        }
 
         for (x in offset + 1 until m) {
-            fakeBeeHome[x][offset] += getAroundIncrease(Pos(x, offset))
+            getAroundIncrease(Pos(x, offset)).run {
+                beeHome[x][offset].size += this
+                beeHome[x][offset].growth = this
+            }
         }
         for (y in offset + 1 until m) {
-            fakeBeeHome[offset][y] += getAroundIncrease(Pos(offset, y))
+            getAroundIncrease(Pos(offset, y)).run {
+                beeHome[offset][y].size += this
+                beeHome[offset][y].growth = this
+            }
         }
     }
 
@@ -111,9 +121,9 @@ class 여왕벌 {
         val leftUpPos = pos.getLeftUpPos()
         val upPos = pos.getUpPos()
         return listOf(
-            fakeBeeHome[leftPos.x][leftPos.y] - beeHome[leftPos.x][leftPos.y],
-            fakeBeeHome[leftUpPos.x][leftUpPos.y] - beeHome[leftUpPos.x][leftUpPos.y],
-            fakeBeeHome[upPos.x][upPos.y] - beeHome[upPos.x][upPos.y]
+            beeHome[leftPos.x][leftPos.y].growth,
+            beeHome[leftUpPos.x][leftUpPos.y].growth,
+            beeHome[upPos.x][upPos.y].growth
         ).max()
     }
 }

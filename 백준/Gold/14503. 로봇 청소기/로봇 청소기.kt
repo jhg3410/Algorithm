@@ -4,14 +4,13 @@ import kotlin.properties.Delegates
 
 class `로봇 청소기` {
 
-    var cleanedCnt = 0
+    private var cleanedCnt = 0
 
     data class Pos(
         var x: Int,
         var y: Int,
     ) {
         operator fun plus(other: Pos) = Pos(x = x + other.x, y = y + other.y)
-
         operator fun contains(other: Pos) = other.x in 0 until x && other.y in 0 until y
     }
 
@@ -45,7 +44,7 @@ class `로봇 청소기` {
         }
     }
 
-    fun RobotCleaner.canMove(command: Command): Boolean {
+    private fun RobotCleaner.canMove(command: Command): Boolean {
         val nPos = when (command) {
             Command.GO -> direction.goPos + pos
             Command.BACK -> direction.backPos + pos
@@ -89,21 +88,20 @@ class `로봇 청소기` {
     private fun operate() {
         while (true) {
             val robotPos = robotCleaner.pos
+
+            // 1
             robotCleaner.clean(robotPos)
 
             if (Direction.values().any {
-                    val nPos = (it.goPos + robotPos)
+                    val nPos = robotPos + it.goPos
                     nPos in Pos(n, m) && room[nPos.x][nPos.y] == 0
                 }) {
 
                 // 3
                 robotCleaner.rotate()
-                val robotDir = robotCleaner.direction
 
-                if (robotCleaner.canMove(Command.GO)
-                    && room[robotPos.x + robotDir.goPos.x][robotPos.y + robotDir.goPos.y] == 0
-                ) {
-
+                val nPos = robotPos + robotCleaner.direction.goPos
+                if (robotCleaner.canMove(Command.GO) && room[nPos.x][nPos.y] == 0) {
                     robotCleaner.go()
                 }
 
@@ -111,7 +109,6 @@ class `로봇 청소기` {
                 // 2
                 if (robotCleaner.canMove(Command.BACK)) {
                     robotCleaner.back()
-                    continue
                 } else {
                     break
                 }

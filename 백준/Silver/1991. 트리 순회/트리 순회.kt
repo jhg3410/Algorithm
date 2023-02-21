@@ -1,54 +1,92 @@
-package heejik.`14week`
+package heejik.`17week`
 
 class `트리 순회` {
 
-    enum class Direction {
-        PREORDER, INORDER, POSTORDER,
-    }
-
     data class Node(
         val name: String,
-        val leftName: String,
-        val rightName: String,
-    )
+        var leftNode: Node? = null,
+        var rightNode: Node? = null,
+    ) {
+        fun searchAndGetChild(node: Node) {
+            if (this.name == node.name) {
+                this.leftNode = node.leftNode
+                this.rightNode = node.rightNode
+                return
+            }
 
-    private val nodes = mutableListOf<Node>()
-    private val answers = MutableList(Direction.values().size) { "" }
+            leftNode?.searchAndGetChild(node)
+            rightNode?.searchAndGetChild(node)
+        }
+    }
 
-    fun setting() {
-        val n = readln().toInt()
+    data class Tree(
+        val root: Node
+    ) {
+        fun add(node: Node) {
+            root.searchAndGetChild(node)
+        }
 
-        repeat(n) {
-            readln().split(" ").run {
-                nodes.add(
-                    Node(name = first(), leftName = this[1], rightName = this[2])
-                )
+        fun preOrder(node: Node) {
+            print(node.name)
+            node.leftNode?.let {
+                preOrder(it)
+            }
+            node.rightNode?.let {
+                preOrder(it)
             }
         }
 
-        solve()
-    }
+        fun inOrder(node: Node) {
+            node.leftNode?.let {
+                inOrder(it)
+            }
+            print(node.name)
+            node.rightNode?.let {
+                inOrder(it)
+            }
+        }
 
-    fun solve() {
-        traverse(nodes.first())
-        answers.forEach {
-            println(it)
+        fun postOrder(node:Node) {
+            node.leftNode?.let {
+                postOrder(it)
+            }
+            node.rightNode?.let {
+                postOrder(it)
+            }
+            print(node.name)
         }
     }
 
-    private fun traverse(node: Node) {
-        if (node.name == ".") return
+    private val tree = Tree(root = Node(name = "A"))
 
-        answers[Direction.PREORDER.ordinal] += node.name
+    fun solve() {
+        setting()
+        traverse()
+    }
 
-        traverse(nodes.find { it.name == node.leftName } ?: Node(name = ".", leftName = ".", rightName = "."))
-        answers[Direction.INORDER.ordinal] += node.name
+    private fun setting() {
+        repeat(readln().toInt()) {
+            readln().split(' ').run {
+                tree.add(
+                    node = Node(
+                        name = this[0],
+                        leftNode = if (this[1] == ".") null else Node(this[1]),
+                        rightNode = if (this[2] == ".") null else Node(this[2])
+                    )
+                )
+            }
+        }
+    }
 
-        traverse(nodes.find { it.name == node.rightName } ?: Node(name = ".", leftName = ".", rightName = "."))
-        answers[Direction.POSTORDER.ordinal] += node.name
+    private fun traverse() {
+        tree.run {
+            preOrder(root).also { println() }
+            inOrder(root).also { println() }
+            postOrder(root).also { println() }
+        }
     }
 }
 
 fun main() {
-    `트리 순회`().setting()
+    `트리 순회`().solve()
 }

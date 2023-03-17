@@ -23,9 +23,8 @@ class 팰린드롬 {
             val (start, end) = br.readLine().split(' ').map { it.toInt() }
             bw.write("${if (dp[start - 1][end - 1]) 1 else 0}\n")
         }
+
         bw.flush()
-        br.close()
-        bw.close()
     }
 
     private fun getDp() {
@@ -38,14 +37,11 @@ class 팰린드롬 {
 
     private fun isPalindrome(start: Int, end: Int): Boolean {
         val offset = (end - start) / 2
-//        println(offset)
+
         repeat(offset+1) {
-//            println(numList[start + it])
-//            println(numList[end - it])
             if (numList[start + it] != numList[end - it]) return false
         }
 
-//        println("---------------")
         return true
     }
 }

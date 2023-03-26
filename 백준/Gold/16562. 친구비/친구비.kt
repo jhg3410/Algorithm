@@ -34,7 +34,7 @@ class 친구비 {
     private fun printAnswer() {
         var answer = 0
 
-        parent.toSet().forEach {
+        parent.map { find(it) }.toSet().forEach {
             answer += cost[it]
         }
         println(if (answer > k) "Oh no" else answer)
@@ -53,11 +53,6 @@ class 친구비 {
         val minCost = min(cost[p2], cost[p1])
         cost[p2] = minCost
         cost[p1] = minCost
-        parent.forEachIndexed { x, it ->
-            if (it == p2) {
-                parent[x] = p1
-            }
-        }
     }
 }
 

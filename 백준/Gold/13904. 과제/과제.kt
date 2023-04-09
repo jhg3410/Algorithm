@@ -37,7 +37,7 @@ class 과제 {
                 doneHomeworks.add(homework)
                 day++
             } else {
-                val minScoreHomework = doneHomeworks.find { it.score == doneHomeworks.minOf { done -> done.score } }!!
+                val minScoreHomework = doneHomeworks.minBy { it.score }
                 if (minScoreHomework.score < homework.score) {
                     doneHomeworks.remove(minScoreHomework)
                     doneHomeworks.add(homework)

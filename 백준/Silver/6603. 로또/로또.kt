@@ -8,21 +8,12 @@ class 로또 {
     }
 
     private fun getInput() {
-        val inputs = mutableListOf<List<Int>>()
-
         while (true) {
             val numbers = readln().split(' ').map { it.toInt() }.drop(1)
             if (numbers.isEmpty()) break
-            inputs.add(numbers)
+            pickNumber(numbers)
+            answer.appendLine()
         }
-
-        inputs.forEachIndexed { index, ints ->
-            pickNumber(ints)
-            if (index != inputs.size - 1) {
-                answer.appendLine()
-            }
-        }
-
         print(answer)
     }
 

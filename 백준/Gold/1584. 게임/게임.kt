@@ -19,7 +19,7 @@ class 게임 {
     var n by Delegates.notNull<Int>()
     var m by Delegates.notNull<Int>()
     val board = MutableList(501) { MutableList(501) { Area(type = 0, lostLife = 0) } }
-    val visited = MutableList(501) { MutableList(501) { false }}
+    val visited = MutableList(501) { MutableList(501) { false } }
 
 
     fun play() {
@@ -73,33 +73,30 @@ class 게임 {
             for (i in dx.indices) {
                 val nx = x + dx[i]
                 val ny = y + dy[i]
+                val originLostLife = board[x][y].lostLife
 
                 if (nx in 0 until 501 && ny in 0 until 501) {
-                    if (board[nx][ny].type == 2) continue
+                    val nextType = board[nx][ny].type
+                    val nextLostLife = board[nx][ny].lostLife
 
-
-                    else if (board[nx][ny].type == 1) {
+                    if (nextType == 2) continue
+                    else if (nextType == 1) {
                         if (visited[nx][ny].not()) {
+                            visited[nx][ny] = true  
                             queue.add(Pos(nx, ny))
-                            board[nx][ny].lostLife = board[x][y].lostLife + 1
-                            visited[nx][ny] = true
-                        }
-                        else if (board[x][y].lostLife + 1 < board[nx][ny].lostLife) {
+                            board[nx][ny].lostLife = originLostLife + 1
+                        } else if (originLostLife + 1 < nextLostLife) {
                             queue.add(Pos(nx, ny))
-                            board[nx][ny].lostLife = board[x][y].lostLife + 1
+                            board[nx][ny].lostLife = originLostLife + 1
                         }
-                    }
-
-
-                    else if (board[nx][ny].type == 0) {
+                    } else if (nextType == 0) {
                         if (visited[nx][ny].not()) {
-                            queue.add(Pos(nx, ny))
-                            board[nx][ny].lostLife = board[x][y].lostLife
                             visited[nx][ny] = true
-                        }
-                        else if (board[x][y].lostLife < board[nx][ny].lostLife) {
                             queue.add(Pos(nx, ny))
-                            board[nx][ny].lostLife = board[x][y].lostLife
+                            board[nx][ny].lostLife = originLostLife
+                        } else if (originLostLife < nextLostLife) {
+                            queue.add(Pos(nx, ny))
+                            board[nx][ny].lostLife = originLostLife
                         }
                     }
                 }

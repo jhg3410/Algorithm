@@ -1,20 +1,19 @@
 class Solution {
     fun solution(n: Int, times: IntArray): Long {
-        var minTime : Long = 1L
-        var maxTime : Long = times.maxOrNull()!!.toLong() * n
-        
-        while (minTime <= maxTime) {
-            val midTime = (minTime + maxTime) / 2
-            
-            var count = 0L
-            times.forEach { time -> count += midTime / time }
-            
-            if (count >= n) {
-                maxTime = midTime - 1
-            } else {
-                minTime = midTime + 1
-            }
+        times.sort()
+
+        var lb = 0L
+        var ub = times.last() * n.toLong()
+        var mid = 0L
+
+        while(lb + 1 < ub) {
+            mid = lb + (ub - lb) / 2
+            val cost = times.sumOf { mid / it }
+            if (cost < n)  lb = mid
+            else ub = mid
         }
-        return minTime
+
+        return ub
     }
+
 }

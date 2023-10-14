@@ -1,57 +1,40 @@
-package heejik.`22week`
-
-import java.util.*
-import kotlin.text.StringBuilder
+package heejik.`48week`
 
 class 탑 {
 
     data class Top(
-        val height: Int,
-        val order: Int
+        val number: Int,
+        val height: Int
     )
 
-    private lateinit var tops: MutableList<Top>
-    private val launchedTops = Stack<Top>()
-
     fun solve() {
-        setting()
-        start()
-    }
-
-    fun setting() {
         val n = readln().toInt()
-        tops = readln()
-            .split(' ')
-            .map { it.toInt() }
-            .mapIndexed { index, i -> Top(i, index + 1) }
-            .toMutableList()
-    }
+        val tops = readln().split(' ').mapIndexed { index, s -> Top(index + 1, s.toInt()) }
+        val priorTops = ArrayDeque<Top>()
+        val answer = MutableList(n) { 0 }
 
-    fun start() {
-        val answer = mutableListOf<Int>()
-        for (i in 0 until tops.size){
-            answer.add(launch(tops[i]))
-        }
-        answer.forEach {
-            print("$it ")
-        }
-    }
-
-    private fun launch(top: Top): Int {
-        var receivedTop = 0
-        while (launchedTops.isNotEmpty()) {
-            if (top.height <= launchedTops.peek().height) {
-                receivedTop = launchedTops.peek().order
-                break
-            } else {
-                launchedTops.pop()
+        tops.forEachIndexed { index, top ->
+            if (priorTops.isEmpty()) {
+                priorTops.add(top)
+                return@forEachIndexed
             }
+            while (priorTops.isNotEmpty()) {
+                val lastPriorTop = priorTops.last()
+                if (top.height >= lastPriorTop.height) {
+                    priorTops.removeLast()
+                } else {
+                    answer[index] = lastPriorTop.number
+                    break
+                }
+            }
+            priorTops.add(top)
         }
-        launchedTops.add(top)
-        return receivedTop
+
+        answer.joinToString(" ").run {
+            println(this)
+        }
     }
 }
-
 
 fun main() {
     탑().solve()

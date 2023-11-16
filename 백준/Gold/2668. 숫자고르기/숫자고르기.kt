@@ -1,44 +1,30 @@
-package heejik.`31week`
-
-import kotlin.properties.Delegates
+package heejik
 
 class 숫자고르기 {
-    var n by Delegates.notNull<Int>()
-    val numbers = mutableListOf<Int>()
-    var answers = mutableSetOf<Int>()
+
     fun solve() {
-        setting()
-        getAnswer()
-        println(answers.size)
-        answers.sorted().forEach {
-            println(it + 1)
+        val n = readln().toInt()
+        val numbers = MutableList(size = n + 1) { Int.MAX_VALUE }
+        repeat(n) {
+            numbers[it + 1] = readln().toInt()
         }
-    }
-
-    private fun setting() {
-        n = readln().toInt()
-        repeat(n) { idx ->
-            val number = readln().toInt() - 1
-            numbers.add(number)
-        }
-    }
-
-    private fun getAnswer() {
-        repeat(n) { idx ->
-            val selectedIdxNumbers = mutableListOf<Int>()
-            val selectedValueNumbers = mutableListOf<Int>()
-            var tmp = idx
+        val answers = mutableListOf<Int>()
+        for (i in 1..n) {
+            val tmp = mutableListOf(i)
+            var now = i
             while (true) {
-                selectedIdxNumbers.add(tmp)
-                tmp = numbers[tmp]
-                selectedValueNumbers.add(tmp)
-                if (tmp in selectedIdxNumbers) break
-            }
-            if (selectedIdxNumbers.all { it in selectedValueNumbers }) {
-                selectedIdxNumbers.forEach {
-                    answers.add(it)
+                now = numbers[now]
+                if (now == i) {
+                    answers.addAll(tmp)
+                    break
                 }
+                if (now in tmp || now in answers) break
+                tmp.add(now)
             }
+        }
+        println(answers.size)
+        for(number in answers.sorted()) {
+            println(number)
         }
     }
 }

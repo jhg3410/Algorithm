@@ -1,77 +1,51 @@
-// P -> 응시자 | O -> 빈테이블 | X -> 파티션
-
 class Solution {
-    data class Pos(
-        val x: Int,
-        val y: Int,
-    )
+   fun solution(places: Array<Array<String>>): IntArray {
+        val answer = mutableListOf<Int>()
 
-    // 위, 오른, 아래, 왼, 오.위, 오.아래, 왼.위, 왼.아래
-    private val checkDistance = listOf(
-        Pos(-2, 0),
-        Pos(0, 2),
-        Pos(2, 0),
-        Pos(0, -2),
-        // -------------
-        Pos(-1, 1),
-        Pos(1, 1),
-        Pos(-1, -1),
-        Pos(1, -1)
-    )
-    private val checkPos = listOf(
-        listOf(Pos(-1, 0)),
-        listOf(Pos(0, 1)),
-        listOf(Pos(1, 0)),
-        listOf(Pos(0, -1)),
-        // ------------------
-        listOf(Pos(-1, 0), Pos(0, 1)),
-        listOf(Pos(1, 0), Pos(0, 1)),
-        listOf(Pos(-1, 0), Pos(0, -1)),
-        listOf(Pos(1, 0), Pos(0, -1))
-    )
-
-
-    fun solution(places: Array<Array<String>>): IntArray {
-        val answer: MutableList<Int> = MutableList(size = 5) { -1 }
-
-        places.forEachIndexed { order, waitingRoom ->
-            val isKeepDistance = checkKeepDistance(waitingRoom = waitingRoom.toList())
-            answer[order] = if (isKeepDistance) 1 else 0
+        places.forEach { place ->
+            repeat(5) { x ->
+                repeat(5) { y ->
+                    if (place[x][y] == 'P') {
+                        if (check(place, 0, x, y, 0).not()) {
+                            answer.add(0)
+                            return@forEach
+                        }
+                    }
+                }
+            }
+            answer.add(1)
         }
 
         return answer.toIntArray()
     }
 
 
-    private fun checkKeepDistance(waitingRoom: List<String>): Boolean {
-        for ((x, row) in waitingRoom.withIndex()) {
-            for ((y, element) in row.withIndex()) {
-                if (element == 'P') {
+    fun check(place: Array<String>, depth: Int, x: Int, y: Int, skip: Int): Boolean {
+        var result = true
 
-                    // distance == 2
-                    repeat(checkDistance.size) {
-                        val nx = x + checkDistance[it].x
-                        val ny = y + checkDistance[it].y
-
-                        if (nx in 0 until 5 && ny in 0 until 5 && waitingRoom[nx][ny] == 'P') {
-                            checkPos[it].forEach { check ->
-                                val checkX = x + check.x
-                                val checkY = y + check.y
-                                if (waitingRoom[checkX][checkY] == 'O') return false
-                            }
-                        }
-                    }
-
-                    // distance == 1
-                    listOf(Pos(1, 0), Pos(-1, 0), Pos(0, 1), Pos(0, -1)).forEach {
-                        val nx = x + it.x
-                        val ny = y + it.y
-
-                        if (nx in 0 until 5 && ny in 0 until 5 && waitingRoom[nx][ny] == 'P') return false
-                    }
-                }
+        if (x < place.lastIndex) {
+            when (place[x + 1][y]) {
+                'P' -> return false
+                'O' -> if (depth == 0) result = check(place, 1, x + 1, y, 0)
             }
         }
-        return true
+
+        if (result && y - 1 >= 0 && skip != -1) {
+            when (place[x][y - 1]) {
+                'P' -> return false
+                'O' -> if (depth == 0) result = check(place, 1, x, y - 1, 1)
+            }
+        }
+
+
+        if (result && y < place.lastIndex && skip != 1) {
+            when (place[x][y + 1]) {
+                'P' -> return false
+                'O' -> if (depth == 0) result = check(place, 1, x, y + 1, -1)
+            }
+        }
+
+
+        return result
     }
 }

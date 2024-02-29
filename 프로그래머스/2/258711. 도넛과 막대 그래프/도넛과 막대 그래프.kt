@@ -36,7 +36,6 @@ class Solution {
     }
     
     private fun bfs(received: Int): Int {
-        visited.fill(false)
         var nodeCount = 1
         var arrowCount = 0
         val queue = ArrayDeque<Int>()

@@ -17,12 +17,11 @@ class Solution {
     
     fun findDungeons(visited: List<Int>, fatigue: Int) {
         if (fatigue > k) return
-        answer = max(answer, visited.size)
-        
         for (i in dungeons.indices) {
             if (i !in visited && fatigue + dungeons[i][0] <= k) {
                 findDungeons(visited.plus(i), fatigue + dungeons[i][1])
             }
         }
+        answer = max(answer, visited.size)
     }
 }

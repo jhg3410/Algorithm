@@ -1,27 +1,16 @@
-import kotlin.math.*
-
 class Solution {
-    var answer = 0
-    var dungeonCount = 0
-    var k = 0
-    lateinit var dungeons: Array<IntArray>
-    
-    fun solution(_k: Int, _dungeons: Array<IntArray>): Int {
-        k = _k
-        dungeons = _dungeons
-        dungeonCount = dungeons.size
-        
-        findDungeons(visited = emptyList(), fatigue = 0)
-        return answer
-    }
-    
-    fun findDungeons(visited: List<Int>, fatigue: Int) {
-        if (fatigue > k) return
-        for (i in dungeons.indices) {
-            if (i !in visited && fatigue + dungeons[i][0] <= k) {
-                findDungeons(visited.plus(i), fatigue + dungeons[i][1])
+    fun solution(k: Int, dungeons: Array<IntArray>): Int {
+        var maxN = 0
+        for (i in 0 until dungeons.count()) {
+            var d = dungeons[i]
+            if (k >= d[0]) {
+                var subN = solution(
+                    k - d[1], 
+                    dungeons.sliceArray(0 .. i - 1) + 
+                        dungeons.sliceArray(i + 1 .. dungeons.count() - 1))
+                if (subN + 1 > maxN) maxN = subN + 1
             }
         }
-        answer = max(answer, visited.size)
+        return maxN
     }
 }

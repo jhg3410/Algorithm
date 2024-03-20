@@ -18,7 +18,7 @@ class Solution {
     fun solution(n: Int, computers: Array<IntArray>): Int {
         val parents = MutableList(size = n) { it }
         for (i in 0 until n) {
-            for (j in 0 until n) {
+            for (j in i+1 until n) {
                 if (i != j && computers[i][j] == 1) {
                     union(i, j, parents)
                 }

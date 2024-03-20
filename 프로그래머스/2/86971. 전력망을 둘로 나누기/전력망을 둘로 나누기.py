@@ -8,7 +8,6 @@ def solution(n, wires):
         relations[x][y] = True
         relations[y][x] = True
 
-    print(relations)
     dfs(n, 0, relations)
     
     return answer

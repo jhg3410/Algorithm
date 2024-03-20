@@ -10,10 +10,7 @@ def solution(genres, plays):
     genresDict_sorted = {k: v for k, v in sorted(genresDict.items(), key = lambda x: sum(map(lambda q: plays[q], x[1])), reverse= True)}
 
 
-    for (gernre, values) in genresDict_sorted.items():
-        for number in sorted(values, key = lambda x: plays[x], reverse= True)[:2]:
-            
-            answer.append(number)
-
+    for values in genresDict_sorted.values():
+        answer.extend(sorted(values, key = lambda x: plays[x], reverse= True)[:2])
 
     return answer

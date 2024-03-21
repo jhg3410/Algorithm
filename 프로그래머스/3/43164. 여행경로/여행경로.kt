@@ -13,17 +13,15 @@ class Solution {
 
     private fun dfs(start: String, visitedIdxArray: BooleanArray, visitedContry: List<String>) {
         if (visitedContry.size == ticketSize + 1) {
-            if (answer.size == 0) {
+            if (answer.isEmpty()) {
                 answer = visitedContry
                 return
             }
             var v = ""
             var a = ""
-            visitedContry.forEach {
-                v += it
-            }
-            answer.forEach {
-                a += it
+            for (i in visitedContry.indices) {
+                v += visitedContry[i]
+                a += answer[i]
             }
             if (v < a) {
                 answer = visitedContry

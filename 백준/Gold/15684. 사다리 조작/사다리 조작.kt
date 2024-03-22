@@ -1,5 +1,9 @@
 package heejik.`55week`
 
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.util.*
+
 class `사다리 조작` {
 
     var n = 0
@@ -9,16 +13,18 @@ class `사다리 조작` {
     lateinit var visited: List<BooleanArray>
 
     fun solve() {
-        readln().split(' ').map { it.toInt() }.run {
-            n = this[0]
-            m = this[1]
-            h = this[2]
-        }
+        val br = BufferedReader(InputStreamReader(System.`in`))
+        var st = StringTokenizer(br.readLine())
+        n = st.nextToken().toInt()
+        m = st.nextToken().toInt()
+        h = st.nextToken().toInt()
         visited = List(size = h) { BooleanArray(size = n) }
 
         repeat(m) {
-            val (x, y) = readln().split(' ').map { it.toInt() - 1 }
-            visited[x][y] = true
+            st = StringTokenizer(br.readLine())
+            val a = st.nextToken().toInt() - 1
+            val b = st.nextToken().toInt() - 1
+            visited[a][b] = true
         }
 
         for (i in 0..3) {
@@ -58,15 +64,9 @@ class `사다리 조작` {
             var now = start
             for (row in 0 until h) {
                 val preLine = if (now - 1 < 0) false else visited[row][now - 1]
-                if (visited[row][now]) {
-                    now++
-                } else if (preLine) {
-                    now--
-                }
+                if (visited[row][now]) now++ else if (preLine) now--
             }
-            if (now != start) {
-                return false
-            }
+            if (now != start) return false
         }
         return true
     }

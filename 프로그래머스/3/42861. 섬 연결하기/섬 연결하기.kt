@@ -1,32 +1,23 @@
 class Solution {    
     fun solution(n: Int, costs: Array<IntArray>): Int {
+        val sortedCosts = costs.sortedBy { it[2] }
         var answer = 0
-        val relations = List(size = n) { MutableList(size = n) { -1 } }
-        costs.forEach {
-            val (x, y, cost) = it
-            relations[x][y] = cost
-            relations[y][x] = cost
-        }
-        
-        val visited = mutableListOf(0)
-        while (visited.size != n) {
-            var minCost = Int.MAX_VALUE
-            var nextNode = -1
 
-            visited.forEach { visit ->
-                (0 until n).filter { it !in visited && relations[visit][it] != -1 }.forEach {
-                    if (relations[visit][it] < minCost) {
-                        minCost = relations[visit][it]
-                        nextNode = it
+        val visited = mutableSetOf(0)
+            while (visited.size != n) {
+                run {
+                    sortedCosts.forEach {
+                        val (x, y, cost) = it
+                        if (x in visited || y in visited) {
+                            if (x in visited && y in visited) return@forEach
+                            visited.add(x)
+                            visited.add(y)
+                            answer += cost
+                            return@run
+                        }
                     }
-                }
             }
-
-            visited.add(nextNode)
-            answer += minCost
         }
-        
-        
         return answer
     }
 }

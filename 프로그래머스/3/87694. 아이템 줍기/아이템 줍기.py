@@ -26,23 +26,18 @@ def solution(_rectangle, character_x, character_y, item_x, item_y):
 
 def bfs(character_x, character_y, item_x, item_y):
     queue = deque()
-    queue.append([character_x, character_y, 0, -1])
+    queue.append([character_x, character_y, 0])
     board[character_x][character_y] = 2
 
     while len(queue) != 0:
-        (x, y, cnt, direction) = queue.popleft()
+        (x, y, cnt) = queue.popleft()
         if x == item_x and y == item_y: return cnt // 2
-        can_dir = []
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
             if nx not in range(1, 101) or ny not in range(1, 101): continue
             if board[nx][ny] != 1: continue
-            can_dir.append([nx, ny, i])
-        if len(can_dir) > 1:
-            can_dir = filter(lambda x: x[2] != direction, can_dir)
-        for nx, ny, n_dir in can_dir:
-            queue.append([nx, ny, cnt + 1, n_dir])
+            queue.append([nx, ny, cnt+1])
             board[nx][ny] = 2
-
+            
     return 0

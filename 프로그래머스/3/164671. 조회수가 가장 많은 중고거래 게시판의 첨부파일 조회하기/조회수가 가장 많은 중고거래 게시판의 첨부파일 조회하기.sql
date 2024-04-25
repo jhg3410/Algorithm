@@ -6,5 +6,6 @@ with best_board as(
 
 
 SELECT concat(concat("/home/grep/src/",BOARD_ID, "/", concat(file_id, file_name)), file_ext) as "FILE_PATH"
-from USED_GOODS_FILE join best_board using(board_id)
+from USED_GOODS_FILE
+where board_id = (select * from best_board)
 order by file_id desc

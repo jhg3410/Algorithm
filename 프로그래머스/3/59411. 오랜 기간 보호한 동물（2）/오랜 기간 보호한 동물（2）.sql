@@ -1,4 +1,4 @@
 select ins.animal_id, ins.name
 from animal_ins as ins join animal_outs as outs using(animal_id)
-order by dateDiff(outs.datetime, ins.datetime) desc
+order by DATEDIFF(outs.datetime, ins.datetime) desc
 limit 2

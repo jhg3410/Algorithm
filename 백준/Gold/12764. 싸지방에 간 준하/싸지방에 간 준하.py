@@ -2,9 +2,7 @@ import heapq
 
 
 def solve():
-    while people:
-        start, end = heapq.heappop(people)
-
+    for start, end in people:
         # 시간이 다 된 자리는 뺀다.
         while seat and seat[0][0] <= start:
             end_time, idx = heapq.heappop(seat)
@@ -13,12 +11,12 @@ def solve():
         # 사람을 자리에 넣는 부분
         if possible_index:
             idx = heapq.heappop(possible_index)
-            heapq.heappush(seat, [end, idx])
-            answer[idx] += 1
         else:
-            answer[len(seat)] += 1
-            heapq.heappush(seat, [end, len(seat)])
-        
+            idx = len(seat)
+
+        heapq.heappush(seat, [end, idx])
+        answer[idx] += 1
+
     count_seat = answer.index(0)
     print(count_seat)
     print(*answer[:count_seat])
@@ -26,14 +24,9 @@ def solve():
 
 if __name__ == '__main__':
     n = int(input())
-    people = []
+    people = sorted([tuple(map(int, input().split())) for _ in range(n)], key=lambda x: x[0])
     seat = []
     possible_index = []
-    answer = [0 for _ in range(n+1)]
-
-    for _ in range(n):
-        start, end = map(int, input().split())
-        heapq.heappush(people, [start, end])
+    answer = [0] * (n + 1)
 
     solve()
-

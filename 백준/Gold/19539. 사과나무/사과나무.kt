@@ -1,36 +1,32 @@
-package heejik.`31week`
+package heejik.`65week`
 
-import kotlin.properties.Delegates
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
-class 사과나무 {
+private class 사과나무 {
 
-    var n by Delegates.notNull<Int>()
-    private lateinit var treeHeight: MutableList<Int>
+    fun solve() = with(BufferedReader(InputStreamReader(System.`in`))) {
+        val n = this.readLine().toInt()
+        val appleCounts = readLine().split(' ').map { it.toInt() } as MutableList
+        val appleSum = appleCounts.sum()
+        var count1 = 0
+        var count2 = 0
 
-    fun solve() {
-        setting()
-        canHeights().also {
-            println(if (it) "YES" else "NO")
-        }
-    }
-
-    private fun setting() {
-        n = readln().toInt()
-        treeHeight = readln().split(' ').map { it.toInt() }.sorted().toMutableList()
-    }
-
-    private fun canHeights(): Boolean {
-        val heightSum = treeHeight.sum()
-        if (heightSum % 3 != 0) return false
-
-        val minTwoCnt = heightSum / 3
-        var twoCnt = 0
-        
-        treeHeight.forEach { height ->
-            twoCnt += height / 2
+        if (appleSum % 3 != 0) {
+            println("NO")
+            return
         }
 
-        return twoCnt >= minTwoCnt
+        for (apple in appleCounts) {
+            count2 += apple / 2
+            count1 += apple % 2
+        }
+
+        if (count2 >= count1) {
+            println("YES")
+        } else {
+            println("NO")
+        }
     }
 }
 

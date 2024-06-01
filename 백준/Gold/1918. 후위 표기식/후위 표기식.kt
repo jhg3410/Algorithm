@@ -35,7 +35,7 @@ private class `후위 표기식` {
             }
             if (it in "+-") {
                 while (true) {
-                    if (stack.isEmpty() || stack.last() in "(") {
+                    if (stack.isEmpty() || stack.last() == "(") {
                         break
                     }
                     sb.append(stack.removeLast())

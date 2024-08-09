@@ -47,7 +47,7 @@ def can_fix():
 
 
 if __name__ == '__main__':
-    answer = 0
+    answer = -1
 
     for line in range(0, 4):
         find_all_case(limit=line, count=0, start=0)

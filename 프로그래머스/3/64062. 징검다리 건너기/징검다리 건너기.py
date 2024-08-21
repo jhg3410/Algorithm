@@ -1,21 +1,34 @@
-from collections import deque
+stones = []
+k = -1
 
 
-def solution(stones, k):
-    queue = deque()
-    answer = 10 ** 10
-    for i in range(len(stones)):
-        while queue and queue[-1][0] < stones[i]:
-            queue.pop()
+def solution(_stones, _k):
+    global stones, k
 
-        queue.append((stones[i], i))
+    stones, k = _stones, _k
 
-        if queue[0][1] <= i - k:
-            queue.popleft()
+    numbers = sorted(set(stones))
+    start = 0
+    end = len(numbers) - 1
+    while start <= end:
+        mid = (start + end) // 2
+        # print(start, end, mid)
+        if can_cross(numbers[mid]):
+            start = mid + 1
+        else:
+            end = mid - 1
+    return numbers[start]
 
-        if i < k - 1:
-            continue
 
-        answer = min(answer, queue[0][0])
+def can_cross(offset: int):
+    count = 0
+    for stone in stones:
+        if stone - offset <= 0:
+            count += 1
+            if count == k:
+                return False
+        else:
+            count = 0
 
-    return answer
+    return True
+

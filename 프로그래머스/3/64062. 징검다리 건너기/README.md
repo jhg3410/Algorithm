@@ -1,100 +1,88 @@
-# **징검다리 건너기**
+# [level 3] 징검다리 건너기 - 64062 
 
-걸린 시간: 2일
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64062) 
 
-`LEVEL 3`
+### 성능 요약
 
-[](https://school.programmers.co.kr/learn/courses/30/lessons/64062)
+메모리: 30.3 MB, 시간: 356.48 ms
 
-- 좋았던 점
-    - k 만큼의 구간동안 가장 큰 값들을 기록하고 모든 구간에서 기록한 값 중 가장 작은 값이 정답이란 걸 유추
-    - 시간복잡도를 고려해, 이분탐색을 생각.
+### 구분
 
-- 아쉬운 점
-    - 이분탐색을 생각했지만, 틀렸다…
+코딩테스트 연습 > 2019 카카오 개발자 겨울 인턴십
 
-- 풀이 과정
+### 채점결과
 
-질문 목록을 보고 `O(n)` 을 푸는 방식을 봤다. (슬라이딩 윈도우)
+정확성: 64.1<br/>효율성: 35.9<br/>합계: 100.0 / 100.0
 
-[](https://school.programmers.co.kr/questions/41064)
+### 제출 일자
 
-그런데 좀 다르게 접근했다. 아래처럼 해도 되지 않을까?
+2024년 08월 21일 17:05:11
 
-앞에서부터 보면서 현재값보다 작으면 지우고, k보다 queue 의 크기가 크면 지우고
+### 문제 설명
 
-이렇게 하면, 결국 queue 의 첫번째 원소가 해당 구간마다 큰 값이라고 판단했다.
+<p><strong>[본 문제는 정확성과 효율성 테스트 각각 점수가 있는 문제입니다.]</strong></p>
 
-```python
-def solution(stones, k):
-    queue = deque()
-    answer = 10 ** 10
-    for i in range(len(stones)):
-        queue.append(stones[i])
+<p>카카오 초등학교의 "니니즈 친구들"이 "라이언" 선생님과 함께 가을 소풍을 가는 중에 <strong>징검다리</strong>가 있는 개울을 만나서 건너편으로 건너려고 합니다. "라이언" 선생님은 "니니즈 친구들"이 무사히 징검다리를 건널 수 있도록 다음과 같이 규칙을 만들었습니다.</p>
 
-        if len(queue) > k:
-            queue.popleft()
-        while queue[0] < stones[i]:
-            queue.popleft()
+<ul>
+<li>징검다리는 일렬로 놓여 있고 각 징검다리의 디딤돌에는 모두 숫자가 적혀 있으며 디딤돌의 숫자는 한 번 밟을 때마다 1씩 줄어듭니다.</li>
+<li>디딤돌의 숫자가 0이 되면 더 이상 밟을 수 없으며 이때는 그 다음 디딤돌로 한번에 여러 칸을 건너 뛸 수 있습니다.</li>
+<li>단, 다음으로 밟을 수 있는 디딤돌이 여러 개인 경우 무조건 가장 가까운 디딤돌로만 건너뛸 수 있습니다.</li>
+</ul>
 
-        if i < k - 1:
-            continue
+<p>"니니즈 친구들"은 개울의 왼쪽에 있으며, 개울의 오른쪽 건너편에 도착해야 징검다리를 건넌 것으로 인정합니다.<br>
+"니니즈 친구들"은 한 번에 한 명씩 징검다리를 건너야 하며, 한 친구가 징검다리를 모두 건넌 후에 그 다음 친구가 건너기 시작합니다.</p>
 
-        print(queue[0])
-        answer = min(answer, queue[0])
+<p>디딤돌에 적힌 숫자가 순서대로 담긴 배열 stones와 한 번에 건너뛸 수 있는 디딤돌의 최대 칸수 k가 매개변수로 주어질 때, 최대 몇 명까지 징검다리를 건널 수 있는지 return 하도록 solution 함수를 완성해주세요.</p>
 
-    return answer
-```
+<h4><strong>[제한사항]</strong></h4>
 
-그런데 정확성이 반도 안 나오는 걸 보고,, 반례를 찾다가
+<ul>
+<li>징검다리를 건너야 하는 니니즈 친구들의 수는 무제한 이라고 간주합니다.</li>
+<li>stones 배열의 크기는 1 이상 200,000 이하입니다.</li>
+<li>stones 배열 각 원소들의 값은 1 이상 200,000,000 이하인 자연수입니다.</li>
+<li>k는 1 이상 stones의 길이 이하인 자연수입니다.</li>
+</ul>
 
-stones = `200000000, 4, 5, 1, 1, 1`, k = `5`
+<hr>
 
-이렇게 넣었는데
+<h5><strong>[입출력 예]</strong></h5>
+<table class="table">
+        <thead><tr>
+<th>stones</th>
+<th>k</th>
+<th>result</th>
+</tr>
+</thead>
+        <tbody><tr>
+<td>[2, 4, 5, 3, 2, 1, 4, 2, 5, 1]</td>
+<td>3</td>
+<td>3</td>
+</tr>
+</tbody>
+      </table>
+<h5><strong>입출력 예에 대한 설명</strong></h5>
 
-`4` 를 return
+<hr>
 
-정답은 `5`가 return 되어야 한다.
+<p><strong>입출력 예 #1</strong></p>
 
-문제는 `while` 문이 였는데, 현재 인덱스의 값을 기준으로 앞에서 부터 지우니 2억과 5 사이에 있는 4가 찍히는 것.
+<p>첫 번째 친구는 다음과 같이 징검다리를 건널 수 있습니다.<br>
+<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/4560e242-cf83-4e77-a14c-174f3831499d/step_stones_104.png" title="" alt="step_stones_104.png"></p>
 
-그래서 넣기 전에 큐의 마지막 값이 현재의 값보다 작으면 지우는 방식으로 진행
+<p>첫 번째 친구가 징검다리를 건넌 후 디딤돌에 적힌 숫자는 아래 그림과 같습니다.<br>
+두 번째 친구도 아래 그림과 같이 징검다리를 건널 수 있습니다.<br>
+<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/d64f29ac-3e35-4fd3-91fa-4d70e3b6c80a/step_stones_101.png" title="" alt="step_stones_101.png"></p>
 
-그런데 이러면 `len(queue) > k` 로 판단할 수가 없다.
+<p>두 번째 친구가 징검다리를 건넌 후 디딤돌에 적힌 숫자는 아래 그림과 같습니다.<br>
+세 번째 친구도 아래 그림과 같이 징검다리를 건널 수 있습니다.<br>
+<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/369bc8a1-7017-4135-a499-505247ab9cfc/step_stones_102.png" title="" alt="step_stones_102.png"></p>
 
-stones = `11111 11 22` , k = `2`
+<p>세 번째 친구가 징검다리를 건넌 후 디딤돌에 적힌 숫자는 아래 그림과 같습니다. <br>
+네 번째 친구가 징검다리를 건너려면, 세 번째 디딤돌에서 일곱 번째 디딤돌로 네 칸을 건너뛰어야 합니다. 하지만 k = 3 이므로 건너뛸 수 없습니다.<br>
+<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/e44e0a83-e637-48ad-858c-4c135c3b078f/step_stones_103.png" title="" alt="step_stones_103.png"></p>
 
-로 예시를 들면
+<p>따라서 최대 3명이 디딤돌을 모두 건널 수 있습니다.</p>
 
-1. 11111
-2. 11111 11
-3. 11111 22
 
-이렇게 되는데 `11111` 은 이미 k 구간을 벗어나기에 없애줘야 한다. 그런데 `len` 으로는 이걸 판단 X
-
-그래서 index 를 기록해서 큐의 맨 앞의 값의 index 가 k 구간을 벗어나면 제거하도록 해야한다.
-
-```python
-from collections import deque
-
-def solution(stones, k):
-    queue = deque()
-    answer = 10 ** 10
-    for i in range(len(stones)):
-        while queue and queue[-1][0] < stones[i]:
-            queue.pop()
-
-        queue.append((stones[i], i))
-
-        if queue[0][1] <= i - k:
-            queue.popleft()
-
-        if i < k - 1:
-            continue
-
-        answer = min(answer, queue[0][0])
-
-    return answer 
-```
-
-굳.
+> 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges

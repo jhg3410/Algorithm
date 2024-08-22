@@ -1,8 +1,9 @@
+## 셔틀버스
 `걸린 시간: 1시간 10분`
 
 LEVEL 3
 
-[](https://school.programmers.co.kr/learn/courses/30/lessons/17678)
+[셔틀버스](https://school.programmers.co.kr/learn/courses/30/lessons/17678)
 
 좋았던 점
 

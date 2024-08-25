@@ -30,13 +30,15 @@ def solution(_key, _lock):
             if lock[x][y] == 0:
                 lock_count += 1
                 lock_values.append([x, y])
-    for lock_x, lock_y in lock_values:
-        for i in range(4):
-            for key_x, key_y in rotated_keys[i]:
-                if is_fit(key_pos=[key_x, key_y], lock_pos=[lock_x, lock_y], rotate_count=i):
-                    return True
 
-    return len(lock_values) == 0
+    if len(lock_values) == 0: return True
+
+    for i in range(4):
+        for key_x, key_y in rotated_keys[i]:
+            if is_fit(key_pos=[key_x, key_y], lock_pos=[lock_values[0][0], lock_values[0][1]], rotate_count=i):
+                return True
+
+    return False
 
 
 def is_fit(key_pos: list, lock_pos: list, rotate_count: int):

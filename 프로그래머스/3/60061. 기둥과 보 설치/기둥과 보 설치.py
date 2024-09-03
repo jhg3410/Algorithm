@@ -83,8 +83,7 @@ def check_is_ok():
 
             if is_column_ok and is_row_ok:
                 continue
-            else:
-                return False
+            return False
 
     return True
 

@@ -25,6 +25,7 @@ search(visited=visited, sheep_count=sheep_count + is_sheep, wolf_count=wolf_coun
 visited.pop()
 ```
 
+- `set` 사용
 난 `append` `pop` 으로 재귀간의 이전 상태를 복구했다면 
 
 ```python

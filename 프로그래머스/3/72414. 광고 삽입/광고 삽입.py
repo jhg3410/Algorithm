@@ -1,8 +1,6 @@
 max_play_time = (60 * 60 * 100) - 1
-# 누적합을 위해 +2
-counts = [0 for _ in range(max_play_time + 2)]
-# 인덱스가 max_play_time 을 참조할 수 있도록 +1
-sums = [0 for _ in range(max_play_time + 1)]
+# 누적합
+counts = [0 for _ in range(max_play_time + 1)]
 play_time = -1
 adv_time = -1
 starts = [0]
@@ -11,7 +9,7 @@ answer = (0, -1)
 
 
 def solution(_play_time, _adv_time, logs):
-    global play_time, adv_time, answer, sums
+    global play_time, adv_time, answer
 
     play_time = change_to_second(_play_time)
     adv_time = change_to_second(_adv_time)
@@ -28,16 +26,14 @@ def solution(_play_time, _adv_time, logs):
     for i in range(1, len(counts)):
         counts[i] += counts[i - 1]
 
-    for i in range(len(sums)):
-        sums[i] = counts[i]
-    for i in range(1, len(sums)):
-        sums[i] += sums[i - 1]
+    for i in range(1, len(counts)):
+        counts[i] += counts[i - 1]
 
     for start in range(max_play_time):
         if start == 0:
-            mans = sums[start + adv_time - 1]
+            mans = counts[start + adv_time - 1]
         else:
-            mans = sums[min(start + adv_time - 1, max_play_time)] - sums[start - 1]
+            mans = counts[min(start + adv_time - 1, max_play_time)] - counts[start - 1]
         if mans > answer[1]:
             answer = (start, mans)
 

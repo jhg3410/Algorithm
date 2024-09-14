@@ -4,7 +4,7 @@
 
 **LEVEL 3**
 
-[](https://school.programmers.co.kr/learn/courses/30/lessons/60062)
+[외벽 점검](https://school.programmers.co.kr/learn/courses/30/lessons/60062)
 
 순열 문제
 

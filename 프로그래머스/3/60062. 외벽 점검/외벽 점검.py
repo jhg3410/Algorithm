@@ -19,23 +19,25 @@ def solution(_n, _weak, _dist):
         weaks.append(weak + n)
 
     for i in range(1, len(dists) + 1):
-        for case in get_all_case([], i):
+        for case in get_all_case([], i, [False] * len(dists)):
             if check(case):
                 return i
 
     return -1
 
 
-def get_all_case(li, count):
+def get_all_case(li, count, used):
     if len(li) == count:
-        return [list(map(lambda x: dists[x], li))]
+        return [li.copy()]
 
     tmp = []
-    for i in range(len(dists)):
-        if i in li: continue
-        li.append(i)
-        tmp.extend(get_all_case(li, count))
+    for i, dist in enumerate(dists):
+        if used[i]: continue
+        li.append(dist)
+        used[i] = True
+        tmp.extend(get_all_case(li, count, used))
         li.pop()
+        used[i] = False
 
     return tmp
 

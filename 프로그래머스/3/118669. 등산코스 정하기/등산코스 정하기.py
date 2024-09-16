@@ -17,16 +17,15 @@ def bfs():
     while queue:
         max_dist, number, start = heapq.heappop(queue)
         if gated[number]:
-
-            # print(f'start: {start}, number: {number}, max_dist: {max_dist}, visited[number]: {visited[number]}')
             if max_dist < min_intensity:
                 top_number, min_intensity = start, max_dist
             elif max_dist == min_intensity:
                 top_number = min(top_number, start)
+            else:
+                break
             continue
 
         for can_go, dist in relations[number]:
-            # print(f'can_go: {can_go}, dist: {dist}, max_dist:{max_dist}')
             new_dist = max(dist, max_dist)
             if new_dist >= visited[can_go]: continue
             if dist > min_intensity: continue

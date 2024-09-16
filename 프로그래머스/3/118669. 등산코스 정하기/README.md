@@ -1,164 +1,125 @@
-# [level 3] 등산코스 정하기 - 118669 
+## **등산코스 정하기**
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/118669) 
+`걸린 시간: 2시간 30분(아이디어 참고)`
 
-### 성능 요약
+LEVEL 3
 
-메모리: 76.5 MB, 시간: 771.23 ms
+[등산코스 정하기](https://school.programmers.co.kr/learn/courses/30/lessons/118669)
 
-### 구분
+`우선순위 큐 + bfs` or `다익스트라`
 
-코딩테스트 연습 > 2022 KAKAO TECH INTERNSHIP
+`출발 → 봉우리 → 출발`  이렇게 이동한다면 결국 `출발 → 봉우리` 이동과 동일한 루트로 `봉우리 → 출발` 로 온다.
 
-### 채점결과
+→ 왜냐면 최소니깐 `출발 → 봉우리`에서 최소한의 시간(힘)으로 이동한다면 `봉우리 → 출발` 도 동일해야 한다.
 
-정확성: 100.0<br/>합계: 100.0 / 100.0
+그래서 `출발 → 봉우리` 만 고려해서 가장 짧은 시간(힘)으로 이동하는 구간을 찾으면 된다.
 
-### 제출 일자
+여기서 난 `봉우리 → 출발` 로 반대로 해서 풀었다.
 
-2024년 09월 16일 15:34:34
+(차이는 크게 없지만 이유는 봉우리 하나씩 bfs 로 찾을 때 작은 순서의 봉우리부터 탐색하면 동일한 intensity 라도 교체할 필요가 없었다.)
 
-### 문제 설명
+여기서 난 봉우리 하나씩 `bfs` 를 돌렸다.
 
-<p>XX산은 <code>n</code>개의 지점으로 이루어져 있습니다. 각 지점은 1부터 <code>n</code>까지 번호가 붙어있으며, 출입구, 쉼터, 혹은 산봉우리입니다. 각 지점은 양방향 통행이 가능한 등산로로 연결되어 있으며, 서로 다른 지점을 이동할 때 이 등산로를 이용해야 합니다. 이때, 등산로별로 이동하는데 일정 시간이 소요됩니다.</p>
+봉우리 하나씩 탐색하면서 갈 수 있는 모든 출발점을 탐색했다.
 
-<p>등산코스는 방문할 지점 번호들을 순서대로 나열하여 표현할 수 있습니다.<br>
-예를 들어 <code>1-2-3-2-1</code> 으로 표현하는 등산코스는 1번지점에서 출발하여 2번, 3번, 2번, 1번 지점을 순서대로 방문한다는 뜻입니다.<br>
-등산코스를 따라 이동하는 중 쉼터 혹은 산봉우리를 방문할 때마다 휴식을 취할 수 있으며, 휴식 없이 이동해야 하는 시간 중 가장 긴 시간을 해당 등산코스의 <code>intensity</code>라고 부르기로 합니다.</p>
++ 탐색하면서 이미 이전 `bfs` 에서 탐색했을 때 나온 `min_intensity` 보다 크게 나오면 그냥 해당 탐색을 끝냈다.
 
-<p>당신은 XX산의 출입구 중 한 곳에서 출발하여 산봉우리 중 한 곳만 방문한 뒤 다시 <strong>원래의</strong> 출입구로 돌아오는 등산코스를 정하려고 합니다. 다시 말해, 등산코스에서 출입구는 <strong>처음과 끝에 한 번씩</strong>, 산봉우리는 <strong>한 번만</strong> 포함되어야 합니다.<br>
-당신은 이러한 규칙을 지키면서 <code>intensity</code>가 최소가 되도록 등산코스를 정하려고 합니다.</p>
+→ 이미 `min_intensity` 보다 큰 순간 그 루트는 정답이 될 수 없기에
 
-<p>다음은 XX산의 지점과 등산로를 그림으로 표현한 예시입니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/d1764091-629a-414b-9f77-e2ff1b38c6e0/desc1-1.PNG" title="" alt="desc1-1.PNG"></p>
+그런데 **시간초과**가 발생
 
-<ul>
-<li>위 그림에서 원에 적힌 숫자는 지점의 번호를 나타내며, 1, 3번 지점에 출입구, 5번 지점에 산봉우리가 있습니다. 각 선분은 등산로를 나타내며, 각 선분에 적힌 수는 이동 시간을 나타냅니다. 예를 들어 1번 지점에서 2번 지점으로 이동할 때는 3시간이 소요됩니다.</li>
-</ul>
+봉우리가 2.5만개, 출발이 1개, 쉼터가 2.5만개로 있을 때가 최대의 시간이 나오는 케이스라고 생각하고, 풀었는데
 
-<p>위의 예시에서 <code>1-2-5-4-3</code> 과 같은 등산코스는 처음 출발한 원래의 출입구로 돌아오지 않기 때문에 잘못된 등산코스입니다. 또한 <code>1-2-5-6-4-3-2-1</code> 과 같은 등산코스는 코스의 처음과 끝 외에 3번 출입구를 방문하기 때문에 잘못된 등산코스입니다.</p>
+그러면 붕우리 하나당 쉼터를 모두 탐색한다고 가정하면
 
-<p>등산코스를 <code>3-2-5-4-3</code> 과 같이 정했을 때의 이동경로를 그림으로 나타내면 아래와 같습니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/ae2b6ccd-290b-4074-aebe-028c13dc4cbe/desc1-2.PNG" title="" alt="desc1-2.PNG"><br>
-이때, 휴식 없이 이동해야 하는 시간 중 가장 긴 시간은 5시간입니다. 따라서 이 등산코스의 <code>intensity</code>는 5입니다.</p>
+2.5만 * 2.5만 → 6억 2천500만
 
-<p>등산코스를 <code>1-2-4-5-6-4-2-1</code> 과 같이 정했을 때의 이동경로를 그림으로 나타내면 아래와 같습니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/165bcca3-ee06-46b4-95f8-7c3cedd2cb42/desc1-3.PNG" title="" alt="desc1-3.PNG"><br>
-이때, 휴식 없이 이동해야 하는 시간 중 가장 긴 시간은 3시간입니다. 따라서 이 등산코스의 <code>intensity</code>는 3이며, 이 보다 <code>intensity</code>가 낮은 등산코스는 없습니다.</p>
+이라서 프로그래머스에선 시간초과가 안 날 거라고 예측했다.
 
-<p>XX산의 지점 수 <code>n</code>, 각 등산로의 정보를 담은 2차원 정수 배열 <code>paths</code>, 출입구들의 번호가 담긴 정수 배열 <code>gates</code>, 산봉우리들의 번호가 담긴 정수 배열 <code>summits</code>가 매개변수로 주어집니다. 이때, <code>intensity</code>가 최소가 되는 등산코스에 포함된 산봉우리 번호와 <code>intensity</code>의 최솟값을 차례대로 정수 배열에 담아 return 하도록 solution 함수를 완성해주세요. <code>intensity</code>가 최소가 되는 등산코스가 여러 개라면 그중 산봉우리의 번호가 가장 낮은 등산코스를 선택합니다.</p>
+그런데 시간초과가 발생한 것으로 봐선 `paths` 가 200,000 이기에 
 
-<hr>
+각 bfs 마다 최대 `paths` 의 수만큼 `for` 문을 돌 수도 있기에, 그런 듯 하다.
 
-<h5>제한사항</h5>
+그래서 찾아본 결과
 
-<ul>
-<li>2 ≤ <code>n</code> ≤ 50,000</li>
-<li><code>n</code> - 1 ≤ <code>paths</code>의 길이 ≤ 200,000</li>
-<li><code>paths</code>의 원소는 <code>[i, j, w]</code> 형태입니다.
+봉우리를 하나씩 bfs 로 탐색하지 말고, 모든 봉우리를 `queue` 에 넣은 다음 한 번에 돌리는 것
 
-<ul>
-<li><code>i</code>번 지점과 <code>j</code>번 지점을 연결하는 등산로가 있다는 뜻입니다.</li>
-<li><code>w</code>는 두 지점 사이를 이동하는 데 걸리는 시간입니다.</li>
-<li>1 ≤ <code>i</code> &lt; <code>j</code> ≤ <code>n</code></li>
-<li>1 ≤ <code>w</code> ≤ 10,000,000</li>
-<li>서로 다른 두 지점을 직접 연결하는 등산로는 최대 1개입니다.</li>
-</ul></li>
-<li>1 ≤ <code>gates</code>의 길이 ≤ <code>n</code>
+```python
+def bfs():
+    global min_intensity, top_number
+    visited = [undefined for _ in range(n + 1)]
 
-<ul>
-<li>1 ≤ <code>gates</code>의 원소 ≤ <code>n</code></li>
-<li><code>gates</code>의 원소는 해당 지점이 출입구임을 나타냅니다.</li>
-</ul></li>
-<li>1 ≤ <code>summits</code>의 길이 ≤ <code>n</code>
+    while queue:
+        max_dist, number, start = heapq.heappop(queue)
+        if gated[number]:
+            if max_dist < min_intensity:
+                top_number, min_intensity = start, max_dist
+            elif max_dist == min_intensity:
+                top_number = min(top_number, start)
+            continue
 
-<ul>
-<li>1 ≤ <code>summits</code>의 원소 ≤ <code>n</code></li>
-<li><code>summits</code>의 원소는 해당 지점이 산봉우리임을 나타냅니다.</li>
-</ul></li>
-<li>출입구이면서 동시에 산봉우리인 지점은 없습니다.</li>
-<li><code>gates</code>와 <code>summits</code>에 등장하지 않은 지점은 모두 쉼터입니다.</li>
-<li>임의의 두 지점 사이에 이동 가능한 경로가 항상 존재합니다.</li>
-<li>return 하는 배열은 <code>[산봉우리의 번호, intensity의 최솟값]</code> 순서여야 합니다.</li>
-</ul>
+        for can_go, dist in relations[number]:
+            new_dist = max(dist, max_dist)
+            if new_dist >= visited[can_go]: continue
+            if dist > min_intensity: continue
+            heapq.heappush(queue, (new_dist, can_go, start))
+            if not gated[can_go]:
+                visited[can_go] = new_dist
 
-<hr>
+```
 
-<h5>입출력 예</h5>
-<table class="table">
-        <thead><tr>
-<th>n</th>
-<th>paths</th>
-<th>gates</th>
-<th>summits</th>
-<th>result</th>
-</tr>
-</thead>
-        <tbody><tr>
-<td>6</td>
-<td>[[1, 2, 3], [2, 3, 5], [2, 4, 2], [2, 5, 4], [3, 4, 4], [4, 5, 3], [4, 6, 1], [5, 6, 1]]</td>
-<td>[1, 3]</td>
-<td>[5]</td>
-<td>[5, 3]</td>
-</tr>
-<tr>
-<td>7</td>
-<td>[[1, 4, 4], [1, 6, 1], [1, 7, 3], [2, 5, 2], [3, 7, 4], [5, 6, 6]]</td>
-<td>[1]</td>
-<td>[2, 3, 4]</td>
-<td>[3, 4]</td>
-</tr>
-<tr>
-<td>7</td>
-<td>[[1, 2, 5], [1, 4, 1], [2, 3, 1], [2, 6, 7], [4, 5, 1], [5, 6, 1], [6, 7, 1]]</td>
-<td>[3, 7]</td>
-<td>[1, 5]</td>
-<td>[5, 1]</td>
-</tr>
-<tr>
-<td>5</td>
-<td>[[1, 3, 10], [1, 4, 20], [2, 3, 4], [2, 4, 6], [3, 5, 20], [4, 5, 6]]</td>
-<td>[1, 2]</td>
-<td>[5]</td>
-<td>[5, 6]</td>
-</tr>
-</tbody>
-      </table>
-<hr>
+이렇게 하면, 변경해야 할 부분은 `visited` 를 단순히 Boolean 으로 고려하면 안되고, 정수값으로 고려해야했다.
 
-<h5>입출력 예 설명</h5>
+이전에 탐색한 부분이라고 해도, 또 탐색할 수 있으니
 
-<p><strong>입출력 예 #1</strong></p>
+→ 그렇다고 아래처럼 visited 를 Boolean 으로 두고, for 문 위에 두면 시간 초과가 발생한다.
 
-<p>문제 예시와 같습니다. 등산코스의 <code>intensity</code>가 최소가 되는 산봉우리 번호는 5, <code>intensity</code>의 최솟값은 3이므로 <code>[5, 3]</code>을 return 해야 합니다.</p>
+→ visited 가 늦게 처리되어서, 이미 가지 않아도 되는 부분을 탐색할 수 있어서.
 
-<p><strong>입출력 예 #2</strong></p>
+```python
+def bfs():
+    global min_intensity, top_number
+    visited = [False for _ in range(n + 1)]
 
-<p>XX산의 지점과 등산로를 그림으로 표현하면 아래와 같습니다.</p>
+    while queue:
+        max_dist, number, start = heapq.heappop(queue)
+        if gated[number]:
+            if max_dist < min_intensity:
+                top_number, min_intensity = start, max_dist
+            elif max_dist == min_intensity:
+                top_number = min(top_number, start)
+            continue
+        visited[number] = True
+        for can_go, dist in relations[number]:
+            new_dist = max(dist, max_dist)
+            if visited[can_go]: continue
+            if dist > min_intensity: continue
+            heapq.heappush(queue, (new_dist, can_go, start))
+```
 
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/b978b0f5-7e8b-4dbe-aeb0-a6c21a3431e4/ex2.PNG" title="" alt="ex2.PNG"></p>
+그리고 우선순위큐를 썼기에 다음과 같이 만약 출발지에 갔는데 해당 `intensity` 가 지금까지 찾은 `min_intensity`  보다 크다면, 그냥 `while` 문을 끝내도 괜찮다. → 그 다음부터 꺼내는 친구들은 무조건 더 클테니
 
-<p>가능한 <code>intensity</code>의 최솟값은 4이며, <code>intensity</code>가 4가 되는 등산코스는 <code>1-4-1</code> 과 <code>1-7-3-7-1</code> 이 있습니다. <code>intensity</code>가 최소가 되는 등산코스가 여러 개이므로 둘 중 산봉우리의 번호가 낮은 <code>1-7-3-7-1</code> 을 선택합니다. 따라서 <code>[3, 4]</code>를 return 해야 합니다.</p>
+```python
+def bfs():
+    global min_intensity, top_number
+    visited = [undefined for _ in range(n + 1)]
 
-<p><strong>입출력 예 #3</strong></p>
+    while queue:
+        max_dist, number, start = heapq.heappop(queue)
+        if gated[number]:
+            if max_dist < min_intensity:
+                top_number, min_intensity = start, max_dist
+            elif max_dist == min_intensity:
+                top_number = min(top_number, start)
+            else:
+                break
+            continue
 
-<p>XX산의 지점과 등산로를 그림으로 표현하면 아래와 같습니다.</p>
-
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/53399b93-368c-42bd-ad68-1230f59479c8/ex3.PNG" title="" alt="ex3.PNG"></p>
-
-<p>가능한 <code>intensity</code>의 최솟값은 1이며, 그때의 등산코스는 <code>7-6-5-6-7</code> 입니다. 따라서 <code>[5, 1]</code>를 return 해야 합니다.</p>
-
-<ul>
-<li><code>7-6-5-4-1-4-5-6-7</code> 과 같은 등산코스는 산봉우리를 여러 번 방문하기 때문에 잘못된 등산코스입니다.</li>
-</ul>
-
-<p><strong>입출력 예 #4</strong></p>
-
-<p>XX산의 지점과 등산로를 그림으로 표현하면 아래와 같습니다.</p>
-
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/0abfa9ed-7b1a-4619-a23d-1becf94d1bc3/ex4.PNG" title="" alt="ex4.PNG"></p>
-
-<p>가능한 <code>intensity</code>의 최솟값은 6, 그때의 등산코스는 <code>2-4-5-4-2</code> 입니다. 따라서 <code>[5, 6]</code>을 return 해야 합니다.</p>
-
-
-> 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
+        for can_go, dist in relations[number]:
+            new_dist = max(dist, max_dist)
+            if new_dist >= visited[can_go]: continue
+            if dist > min_intensity: continue
+            heapq.heappush(queue, (new_dist, can_go, start))
+            if not gated[can_go]:
+                visited[can_go] = new_dist
+```

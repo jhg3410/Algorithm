@@ -23,7 +23,7 @@ ex). `[[[2,3], [3,4]], [[1,2], [5,3]]]`
 
 그래서 각 셀 좌표에 `번호`가 들어간다. 이 번호가 같으면 병합된 셀이라는 의미
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/b7811c85-19db-43c9-9afa-eb8a1faa1680/bded47d2-ea5b-46ec-9482-08d516aa0a31/image.png)
+![image](https://github.com/user-attachments/assets/b3595f0c-4051-4427-a49b-6b78edbc628a)
 
 이렇게 번호가 들어가 있으면 2끼리 병합된 셀, 1끼리 병합된 셀이라는 의미
 

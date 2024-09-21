@@ -1,104 +1,96 @@
-# [level 3] 산 모양 타일링 - 258705 
+## **산 모양 타일링**
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/258705) 
+`걸린 시간: 3시간(해설 참고)`
 
-### 성능 요약
+**LEVEL 3**
 
-메모리: 18.3 MB, 시간: 58.96 ms
+[산 모양 타일링](https://school.programmers.co.kr/learn/courses/30/lessons/258705)
 
-### 구분
+`dp 문제`
 
-코딩테스트 연습 > 2024 KAKAO WINTER INTERNSHIP
+`dp` 는 알고 있었지만, n 이 커질수록 중복되는 걸 제거하고 양 옆에 4가지의 모양을 붙일 수 있는 형태로 나아가서 풀려고 했다.
 
-### 채점결과
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/b7811c85-19db-43c9-9afa-eb8a1faa1680/388ec98f-5a7c-4cf2-8d32-6b65bdd9a44b/image.png)
 
-정확성: 100.0<br/>합계: 100.0 / 100.0
+이러한 형태였고, 이처럼 2개가 계속해서 2배씩 커지고 이게 또 n 이 증가할 수록 2배씩 커지는.. 나머지는 중복된다고 생각했다.
 
-### 제출 일자
+예를 들어, 
 
-2024년 09월 22일 01:32:42
+`n == 0` → 1
 
-### 문제 설명
+`n == 1` → 3 
 
-<p>한 변의 길이가 1인 정삼각형 <code>2n+1</code>개를 이어붙여 윗변의 길이가 <code>n</code>, 아랫변의 길이가 <code>n+1</code>인 사다리꼴을 만들 수 있습니다. 이때 사다리꼴의 윗변과 변을 공유하는 <code>n</code>개의 정삼각형 중 일부의 위쪽에 같은 크기의 정삼각형을 붙여 새로운 모양을 만들었습니다. 예를 들어 <code>n</code>이 4이고, 1번째, 2번째, 4번째 정삼각형 위에 정삼각형을 붙인 모양은 다음과 같습니다.</p>
+`n == 2`
 
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/b1eb2bdf-c4a8-4750-8a0d-1fe1a304ccaf/pic1.png" title="" alt="pic1.png"></p>
+→ 여기서 n == 1 일때 2개가 각각 2개씩 생성하고 나머지는 모두 중복된다고 판단했다.
 
-<p>이렇게 만든 모양을 <strong>정삼각형 타일</strong> 또는 정삼각형 2개를 이어 붙인 <strong>마름모 타일</strong>로 빈 곳이 없도록 채우려고 합니다. 정삼각형 타일과 마름모 타일은 돌려서 사용할 수 있습니다.</p>
+→ 또한 나올 수 있는 경우의 수는 이전 (n-1) 의 4배라고 생각.
 
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/f145dc29-ce8b-4077-ad71-9442b1c4434f/pic2.png" title="" alt="pic2.png"></p>
+→ 12(모든 경우의 수)  - (2 * 2) → 8
 
-<p>타일을 놓을 때 다른 타일과 겹치거나 모양을 벗어나게 놓을 수는 없습니다. 위의 예시 모양을 채우는 방법 중 일부는 다음과 같습니다.</p>
+→ 4개는 확보하고 나머지 8개는 중복된다.
 
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/89dbb27a-f939-4b71-abd9-3de304f67c4e/pic3.png" title="" alt="pic3.png"></p>
+→ 4 + 8//2
 
-<p>사다리꼴의 윗변의 길이를 나타내는 정수 <code>n</code>과 사다리꼴 윗변에 붙인 정삼각형을 나타내는 1차원 정수 배열 <code>tops</code>가 매개변수로 주어집니다. 이때 문제 설명에 따라 만든 모양을 정삼각형 또는 마름모 타일로 빈 곳이 없도록 채우는 경우의 수를 <code>10007</code>로 나눈 나머지를 return 하도록 solution 함수를 완성해 주세요.</p>
+→ 8
 
-<hr>
+`n == 3`
 
-<h5>제한사항</h5>
+→ 똑같이 32(모든 경우의 수) - (4 * 2) →24
 
-<ul>
-<li>1 ≤ <code>n</code> ≤ 100,000</li>
-<li><code>tops</code>의 길이 = <code>n</code>
+→ 8개는 확보하고 나머지 24개는 중복된다.
 
-<ul>
-<li><code>tops[i]</code>는 사다리꼴의 윗변과 변을 공유하는 <code>i+1</code>번째 정삼각형의 위쪽에 정삼각형을 붙이는 경우 1, 붙이지 않는 경우 0입니다.</li>
-</ul></li>
-</ul>
+→ 8 + 24//2
 
-<hr>
+→ 20
 
-<h5>입출력 예</h5>
-<table class="table">
-        <thead><tr>
-<th>n</th>
-<th>tops</th>
-<th>result</th>
-</tr>
-</thead>
-        <tbody><tr>
-<td>4</td>
-<td>[1, 1, 0, 1]</td>
-<td>149</td>
-</tr>
-<tr>
-<td>2</td>
-<td>[0, 1]</td>
-<td>11</td>
-</tr>
-<tr>
-<td>10</td>
-<td>[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</td>
-<td>7704</td>
-</tr>
-</tbody>
-      </table>
-<hr>
+이렇게 하면 위 삼각형이 없을 때의 개수를 구할 수 있겠다고 판다.
 
-<h5>입출력 예 설명</h5>
+그러면 위가 있다면, ex). `n == 4, tops == [1, 1, 0, 1]`
 
-<p><strong>입출력 예 #1</strong></p>
+이렇게라면
 
-<p>문제의 예시와 같습니다. 문제에서 설명한 방법을 포함해 총 149가지 방법이 존재합니다.</p>
+위가 마름모가 활성화 될 때마다의 경우의 수를 모두 구해주면 된다 생각했다.
 
-<p>따라서 149를 return 해야 합니다.</p>
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/b7811c85-19db-43c9-9afa-eb8a1faa1680/d83afb6e-0356-4cc7-b55b-959a426a8689/image.png)
 
-<p><strong>입출력 예 #2</strong></p>
+이렇게 `[0,0,0,0]` 일 땐, 48
 
-<p>문제 설명에 따라 만든 모양은 다음과 같습니다.</p>
+`[1,0,0,0]` 일 땐 20
 
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/d887399e-2335-4a99-8c3b-af0d71e595bd/pic4.png" title="" alt="pic4.png"></p>
+`[0,1,0,0]` 이면 3 * 8 = 24
 
-<p>이 모양을 타일로 채우는 방법은 다음과 같이 총 11가지입니다.</p>
+해서 다 더하면 정답이라 생각했는데 140이 나옴…
 
-<p><img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/aad9c7de-087c-4a6c-9b02-8c6712a42f69/pic5.png" title="" alt="pic5.png"></p>
+- 다른 풀이
 
-<p>따라서 11을 return 해야 합니다.</p>
+이거랑
 
-<p><strong>입출력 예 #3</strong></p>
+[2024 카카오 겨울 인턴십 코딩테스트 문제해설 - tech.kakao.com](https://tech.kakao.com/posts/610)
 
-<p>경우의 수는 총 17,711가지입니다. 따라서 17711을 10007로 나눈 나머지인 7704를 return 해야 합니다.</p>
+또 하나는
 
+```python
+def solution(n, tops):
+    dp = [1] * (2 * n + 2)
 
-> 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
+    for i in range(2, 2 * n + 2):
+        dp[i] = (dp[i - 1] + dp[i - 2]) % 10007
+
+        if i % 2 == 0 and tops[i // 2 - 1]:
+            dp[i] += dp[i - 1]
+    print(dp)
+    return dp[-1]
+```
+
+이렇게인데, 어떤 풀이냐면
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/b7811c85-19db-43c9-9afa-eb8a1faa1680/5312f01b-4577-481d-8501-8a6157c1e436/image.png)
+
+이렇게 아래의 삼각형 개수만큼 dp 를 진행하면서  `dp[n]=dp[n-1]+dp[n-2]` 를 하면 되는데, 
+
+위에 삼각형이 있다면, `dp[n] = dp[n-1]` 을 한 번 더 해주면 된다.
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/b7811c85-19db-43c9-9afa-eb8a1faa1680/c336e253-6ee1-44fd-9fe7-5974af51eef2/image.png)
+
+위 사진처럼 이뤄진다.

@@ -39,9 +39,9 @@ def inject_medicine():
 def extra_grow_tree():
     for x, y in medicines:
         count = 0
-        for i in range(1, 8, 2):
-            nx = x + dxs[i]
-            ny = y + dys[i]
+        for dx, dy in zip(dxs[1::2], dys[1::2]):
+            nx = x + dx
+            ny = y + dy
             if not in_range(nx, ny): continue
             if board[nx][ny] > 0:
                 count += 1

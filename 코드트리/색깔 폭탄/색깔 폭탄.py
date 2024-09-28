@@ -64,17 +64,16 @@ def find_bomb():
 
 def operate_gravity():
     for y in range(n):
-        for x in range(n - 2, -1, -1):
-            if board[x][y] < 0: continue
-            px = x
-            nx = x + 1
-            while nx < n:
-                if board[nx][y] == EMPTY:
-                    board[nx][y], board[px][y] = board[px][y], EMPTY
-                    px = nx
-                    nx += 1
-                else:
-                    break
+        last_idx = n - 1
+        for x in range(n - 1, -1, -1):
+            if board[x][y] == EMPTY: continue
+            if board[x][y] == -1 or last_idx == x:
+                last_idx = x - 1
+                continue
+
+            board[last_idx][y] = board[x][y]
+            board[x][y] = EMPTY
+            last_idx -= 1
 
 
 # 반시계 90도 회전
@@ -101,4 +100,5 @@ if __name__ == '__main__':
         operate_gravity()
         rotate()
         operate_gravity()
+
     print(score)

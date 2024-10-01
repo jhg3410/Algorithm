@@ -17,7 +17,7 @@ def move():
         for y in range(n):
             if visited[x][y]: continue
             if board[x][y] != 3: continue
-            last_number = 4
+
             queue = deque()
             queue.append([x, y, 3])
             visited[x][y] = True
@@ -48,8 +48,7 @@ def move():
 
 def shoot():
     ball = [(round // n) % 4, round % n]
-    direction, line = ball
-    # print(f'ball: {ball}')
+    direction, line = ball[0], ball[1] if ball[0] < 2 else n - ball[1] - 1
     if direction == 0:
         start = [line, 0]
     elif direction == 1:
@@ -58,9 +57,8 @@ def shoot():
         start = [line, n - 1]
     else:
         start = [0, line]
-    print(direction)
     ball_x, ball_y = start
-    # print(start)
+
     while in_range(ball_x, ball_y):
         if board[ball_x][ball_y] in range(1, 4):
             change_direction(ball_x, ball_y)
@@ -70,7 +68,6 @@ def shoot():
 
 
 def change_direction(x: int, y: int):
-    # print(x, y)
     global score
     visited = [[False for _ in range(n)] for _ in range(n)]
     queue = deque()
@@ -91,7 +88,6 @@ def change_direction(x: int, y: int):
             if board[nx][ny] == 1 and board[qx][qy] == 3: continue
             queue.append([nx, ny, distant + 1])
             visited[nx][ny] = True
-    # print(head_pos, tail_pos)
 
     board[head_pos[0]][head_pos[1]] = 3
     board[tail_pos[0]][tail_pos[1]] = 1
@@ -100,11 +96,7 @@ def change_direction(x: int, y: int):
 if __name__ == '__main__':
     for _ in range(k):
         move()
-        # for row in board:
-        #     print(row)
         shoot()
         round += 1
 
     print(score)
-    # for row in board:
-    #     print(row)

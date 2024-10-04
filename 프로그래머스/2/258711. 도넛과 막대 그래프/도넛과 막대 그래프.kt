@@ -1,65 +1,79 @@
-import java.util.ArrayDeque
+
+class Node(
+    val send: MutableList<Int> = mutableListOf(),
+    val receive: MutableList<Int> = mutableListOf()
+)
 
 class Solution {
-    data class Edge(
-        val shot: MutableList<Int> = mutableListOf(),
-        val receive: MutableList<Int> = mutableListOf()
-    )
-    
-    var answer = IntArray(4)
-    val graphs = List(size = 1000001) { Edge() }
-    val visited = BooleanArray(1000001)
-    
+    private val relations = List(size = 1_000_001) { Node() }
     fun solution(edges: Array<IntArray>): IntArray {
-        var fakeEdge = -1
-    
-        edges.forEach { edge ->
-            val (a, b) = edge
-            graphs[a].shot.add(b)
-            graphs[b].receive.add(a)
+        val answer = MutableList(size = 4) { 0 }
+
+        edges.forEach {
+            val (send, receive) = it
+            relations[send].send.add(receive)
+            relations[receive].receive.add(send)
         }
-        
-        // 생성된 연결 정점 찾기
-        for ((idx, graph) in graphs.withIndex()) {
-            if (graph.shot.size >= 2 && graph.receive.size == 0) {
-                fakeEdge = idx
+        var mainNode = -1
+
+        // 정점 찾기
+        for (number in 1..1_000_000) {
+            if (relations[number].send.count() >= 2 && relations[number].receive.isEmpty()) {
+                mainNode = number
+            }
+        }
+        answer[0] = mainNode
+        visited[mainNode] = true
+        // 정점에서 연결한 그래프 탐색
+        relations[mainNode].send.forEach { graphNode ->
+            val graphType = findGraph(nodeNumber = graphNode)
+            if (graphType == -1) return@forEach
+            answer[graphType] += 1
+        }
+
+        answer[1] = relations[mainNode].send.count() - (answer[2] + answer[3])
+
+        return answer.toIntArray()
+    }
+
+    private val visited = BooleanArray(size = 1_000_001)
+
+    private fun findGraph(nodeNumber: Int): Int {
+        var graphType = -1
+
+        val queue = ArrayDeque<Int>()
+        visited[nodeNumber] = true
+        queue.add(nodeNumber)
+
+        while (queue.isNotEmpty()) {
+            val node = queue.removeFirst()
+            val sendCount = relations[node].send.count()
+            val receiveCount = relations[node].receive.count()
+            if (sendCount == 1 && receiveCount == 0) {
+                graphType = 2
                 break
             }
-        }
-        answer[0] = fakeEdge
-        
-        graphs[fakeEdge].shot.forEach {
-            bfs(it).also { answer[it]++ }
-        }
-        
-        return answer
-    }
-    
-    private fun bfs(received: Int): Int {
-        var nodeCount = 1
-        var arrowCount = 0
-        val queue = ArrayDeque<Int>()
-        queue.add(received)
-        visited[received] = true
-        
-        while (queue.isNotEmpty()) {
-            val edge = queue.removeFirst()
-            graphs[edge].shot.forEach {
-                arrowCount++
-                if (visited[it]) {
-                    return@forEach
-                }
+            if (sendCount == 0 && receiveCount == 1) {
+                graphType = 2
+                break
+            }
+            if (sendCount >= 2) {
+                graphType = 3
+                break
+            }
+            relations[node].send.forEach {
+                if (visited[it]) return@forEach
                 visited[it] = true
                 queue.add(it)
-                nodeCount++
+            }
+            relations[node].receive.forEach {
+                if (visited[it]) return@forEach
+                visited[it] = true
+                queue.add(it)
             }
         }
-        return if (nodeCount == arrowCount) {
-            1
-        } else if (nodeCount > arrowCount) {
-            2
-        } else {
-            3
-        }
+
+        return graphType
     }
 }
+

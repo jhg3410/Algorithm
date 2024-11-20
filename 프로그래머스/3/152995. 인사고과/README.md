@@ -1,10 +1,10 @@
 # [level 3] 인사고과 - 152995 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/152995#) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/152995?language=kotlin) 
 
 ### 성능 요약
 
-메모리: 30.7 MB, 시간: 68.31 ms
+메모리: 109 MB, 시간: 186.60 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 11월 21일 00:35:27
+2024년 11월 21일 00:59:55
 
 ### 문제 설명
 

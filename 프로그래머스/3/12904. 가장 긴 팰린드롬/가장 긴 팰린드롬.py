@@ -1,17 +1,21 @@
 def solution(s):
-    answer = 0
-
-    for offset in range(len(s), 0, -1):
-        for j in range(0, len(s) - offset+1):
-            if check_palindrome(s[j: j+offset]):
-                return offset
-
-    return answer
-
-def check_palindrome(string):
-    for idx in range(len(string)//2):
-        behind_idx = len(string)-1-idx
-        if not string[behind_idx] == string[idx]: return False
+    answer = 1
+    dp = [[False for _ in range(len(s))] for _ in range(len(s))]
     
-    return True
+    for i in range(len(s)):
+        dp[i][i] = True
         
+    for i in range(0, len(s)-1):
+        if s[i] == s[i+1]:
+            dp[i][i+1] = True
+            answer = 2
+    
+    for length in range(3, len(s)+1):
+        for i in range(0, len(s) - length + 1):
+            front = i
+            end = i+length-1
+            if s[front] == s[end] and dp[front+1][end-1]:
+                dp[front][end] = True
+                answer = max(answer, length)
+    
+    return answer
